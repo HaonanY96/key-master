@@ -1,30 +1,149 @@
 // 键盘 SVG 数据
 export const keyboardSvgData = {
-  // Windows 键盘数据
-  windows: {
-    // 滤镜定义
-    filters: [
-      {
-        id: "filter0_f",
-        type: "feFlood",
-        props: {
-          floodOpacity: 0,
-          result: "BackgroundImageFix",
-        },
+  // 键盘整体配置
+  config: {
+    viewBox: KEYBOARD_DIMENSIONS.viewBox,
+    keyboard: {
+      // 键盘主体
+      main: {
+        width: 1620,
+        height: 684,
+        x: 81,
+        y: 24,
+        rx: 16,
+        fill: "#9F9F9F",
       },
-      {
+      // 键盘内层
+      inner: {
+        width: 1620,
+        height: 684,
+        x: 81,
+        y: 16,
+        rx: 16,
+        fill: "#C0C0C0",
+      },
+    },
+    // 渐变定义
+    gradients: {
+      background: [
+        {
+          id: "paint0_linear",
+          type: "linearGradient",
+          x1: 100,
+          y1: 172,
+          x2: 1684.5,
+          y2: 510,
+          stops: [
+            { offset: 0, color: "white", opacity: 1 },
+            { offset: 0.295544, color: "white", opacity: 0 },
+            { offset: 0.483052, color: "white", opacity: 1 },
+            { offset: 0.654934, color: "white", opacity: 0.81 },
+            { offset: 1, color: "white", opacity: 1 },
+          ],
+        },
+        {
+          id: "paint1_linear",
+          type: "linearGradient",
+          x1: 100,
+          y1: 164,
+          x2: 1684.5,
+          y2: 502,
+          stops: [
+            { offset: 0, color: "white", opacity: 1 },
+            { offset: 0.295544, color: "white", opacity: 0 },
+            { offset: 0.483052, color: "white", opacity: 1 },
+            { offset: 0.654934, color: "white", opacity: 0.81 },
+            { offset: 1, color: "white", opacity: 1 },
+          ],
+        },
+      ],
+    },
+    // 滤镜定义
+    filters: {
+      // 键盘左侧阴影
+      leftShadow: {
+        id: "filter0_f",
+        opacity: 0.3,
+        path: "M44 76L103 44V694H86.567L44 76Z",
+        fill: "black",
+      },
+      // 键盘右侧阴影
+      rightShadow: {
+        id: "filter1_f",
+        opacity: 0.3,
+        path: "M1738 76L1679 44V694H1695.43L1738 76Z",
+        fill: "black",
+      },
+      // 键盘主体阴影
+      mainShadow: {
         id: "filter2_dd",
         type: "feGaussianBlur",
-        props: {
-          stdDeviation: 4,
-          result: "effect1_dropShadow",
+        stdDeviation: 4,
+      },
+      // 按键阴影（通用）
+      keysShadow: {
+        id: "filter_ddi",
+        type: "dropShadow",
+        dx: 0,
+        dy: 2,
+        stdDeviation: 4,
+        floodOpacity: 0.25,
+      },
+      // 按键阴影和高光效果
+      keyEffect: {
+        id: "filter_ddi",
+        effects: [
+          {
+            // 外阴影
+            type: "dropShadow",
+            dx: 0,
+            dy: 0,
+            stdDeviation: 1.5,
+            floodOpacity: 0.45,
+            blendMode: "multiply",
+          },
+          {
+            // 底部阴影
+            type: "dropShadow",
+            dx: 0,
+            dy: 4,
+            stdDeviation: 2,
+            floodOpacity: 0.25,
+          },
+          {
+            // 内部高光
+            type: "innerShadow",
+            dx: 0,
+            dy: 3,
+            color: "white",
+            opacity: 1,
+            blendMode: "screen",
+          },
+        ],
+      },
+    },
+    // 混合模式
+    blendModes: {
+      screenOverlay: {
+        mode: "screen",
+        opacity: 0.3,
+        rect: {
+          x: 81,
+          y: -8,
+          width: 1620,
+          height: 716,
+          fill: "white",
         },
       },
-    ],
+    },
+  },
+  // Windows 键盘数据
+  windows: {
     // 按键数据
     keys: [
       {
         id: "key-escape",
+        keyIdentifier: "Escape",
         rect: {
           width: 168,
           height: 96,
@@ -39,6 +158,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f1",
+        keyIdentifier: "F1",
         rect: {
           width: 96,
           height: 96,
@@ -53,6 +173,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f2",
+        keyIdentifier: "F2",
         rect: {
           width: 96,
           height: 96,
@@ -67,6 +188,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f3",
+        keyIdentifier: "F3",
         rect: {
           width: 96,
           height: 96,
@@ -81,6 +203,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f4",
+        keyIdentifier: "F4",
         rect: {
           width: 96,
           height: 96,
@@ -95,6 +218,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f5",
+        keyIdentifier: "F5",
         rect: {
           width: 96,
           height: 96,
@@ -109,6 +233,7 @@ export const keyboardSvgData = {
       },
       {
         id: "key-f6",
+        keyIdentifier: "F6",
         rect: {
           width: 96,
           height: 96,
@@ -119,6 +244,111 @@ export const keyboardSvgData = {
         text: {
           content: "F6",
           path: "M862.652 121H864.413V114.494H870.72V112.932H864.413V108.017H871.374V106.455H862.652V121ZM878.964 121.199C881.904 121.234 883.822 119.018 883.822 116.312C883.822 113.5 881.741 111.483 879.248 111.483C877.75 111.483 876.464 112.214 875.669 113.415H875.555C875.562 109.871 876.94 107.818 879.191 1",
+        },
+      },
+      {
+        id: "key-f7",
+        keyIdentifier: "F7",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 933,
+          y: 40,
+        },
+        text: {
+          content: "F7",
+          path: "M971.179 121H972.941V114.494H979.248V112.932H972.941V108.017H979.901V106.455H971.179V121ZM983.116 121H984.963L991.44 108.102V106.455H982.122V108.017H989.622V108.131L983.116 121Z",
+        },
+      },
+      {
+        id: "key-f8",
+        keyIdentifier: "F8",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1041,
+          y: 40,
+        },
+        text: {
+          content: "F8",
+          path: "M1078.73 121H1080.49V114.494H1086.8V112.932H1080.49V108.017H1087.45V106.455H1078.73V121ZM1094.87 121.199C1097.78 121.199 1099.8 119.501 1099.81 117.136C1099.8 115.297 1098.57 113.734 1097 113.443V113.358C1098.37 113.003 1099.26 111.668 1099.28 110.119C1099.26 107.903 1097.4 106.256 1094.87 106.256C1092.31 106.256 1090.45 107.903 1090.47 110.119C1090.45 111.668 1091.35 113.003 1092.74 113.358V113.443C1091.14 113.734 1089.91 115.297 1089.93 117.136C1089.91 119.501 1091.94 121.199 1094.87 121.199Z",
+        },
+      },
+      {
+        id: "key-f9",
+        keyIdentifier: "F9",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1149,
+          y: 40,
+        },
+        text: {
+          content: "F9",
+          path: "M1186.65 121H1188.41V114.494H1194.72V112.932H1188.41V108.017H1195.37V106.455H1186.65V121ZM1202.77 106.256C1199.81 106.22 1197.91 108.443 1197.91 111.114C1197.91 113.926 1199.98 115.943 1202.48 115.943C1203.99 115.943 1205.27 115.205 1206.06 114.011H1206.17C1206.17 117.591 1204.78 119.636 1202.54 119.636C1201 119.636 1200.07 118.67 1199.75 117.335H1198.02C1198.36 119.636 1200.09 121.199 1202.54 121.199C1205.81 121.199 1207.82 118.301 1207.82 113.131C1207.82 107.79 1205.15 106.284 1202.77 106.256Z",
+        },
+      },
+      {
+        id: "key-f10",
+        keyIdentifier: "F10",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1257,
+          y: 40,
+        },
+        text: {
+          content: "F10",
+          path: "M1289.99 121H1291.76V114.494H1298.06V112.932H1291.76V108.017H1298.72V106.455H1289.99V121ZM1306.59 106.455H1304.83L1301.19 108.869V110.659L1304.74 108.301H1304.83V121H1306.59V106.455ZM1315.52 121.199C1318.73 121.199 1320.57 118.479 1320.57 113.727C1320.57 109.011 1318.7 106.256 1315.52 106.256C1312.34 106.256 1310.46 109.011 1310.46 113.727C1310.46 118.479 1312.31 121.199 1315.52 121.199Z",
+        },
+      },
+      {
+        id: "key-f11",
+        keyIdentifier: "F11",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1365,
+          y: 40,
+        },
+        text: {
+          content: "F11",
+          path: "M1399.6 121H1401.36V114.494H1407.66V112.932H1401.36V108.017H1408.32V106.455H1399.6V121ZM1416.19 106.455H1414.43L1410.79 108.869V110.659L1414.34 108.301H1414.43V121H1416.19V106.455ZM1425.49 106.455H1423.73L1420.09 108.869V110.659L1423.64 108.301H1423.73V121H1425.49V106.455Z",
+        },
+      },
+      {
+        id: "key-f12",
+        keyIdentifier: "F12",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1473,
+          y: 40,
+        },
+        text: {
+          content: "F12",
+          path: "M1506.19 121H1507.95V114.494H1514.26V112.932H1507.95V108.017H1514.91V106.455H1506.19V121ZM1522.79 106.455H1521.02L1517.39 108.869V110.659L1520.94 108.301H1521.02V121H1522.79V106.455ZM1526.97 121H1536.14V119.438H1529.38V119.324L1532.65 115.83C1535.15 113.152 1535.89 111.902 1535.89 110.29C1535.89 108.045 1534.07 106.256 1531.51 106.256C1528.96 106.256 1527.03 107.989 1527.03 110.545H1528.7C1528.7 108.891 1529.77 107.79 1531.46 107.79C1533.03 107.79 1534.24 108.756 1534.24 110.29C1534.24 111.632 1533.45 112.626 1531.77 114.466L1526.97 119.722V121Z",
+        },
+      },
+      {
+        id: "key-delete",
+        keyIdentifier: "Delete",
+        rect: {
+          width: 96,
+          height: 96,
+          rx: 8,
+          x: 1581,
+          y: 40,
+        },
+        text: {
+          content: "Delete",
+          path: "M1637.75 117.227C1636.84 117.227 1636.04 116.998 1635.34 116.538C1634.65 116.074 1634.1 115.421 1633.71 114.578C1633.31 113.731 1633.12 112.729 1633.12 111.574C1633.12 110.428 1633.31 109.434 1633.71 108.591C1634.1 107.748 1634.65 107.097 1635.35 106.638C1636.05 106.179 1636.86 105.949 1637.78 105.949C1638.49 105.949 1639.05 106.067 1639.46 106.304C1639.88 106.536 1640.19 106.801 1640.41 107.099C1640.64 107.393 1640.81 107.634 1640.93 107.824H1641.07V102.455H1642.75V117H1641.13V115.324H1640.93C1640.81 115.523 1640.63 115.774 1640.41 116.077C1640.18 116.375 1639.85 116.643 1639.43 116.879C1639.01 117.111 1638.45 117.227 1637.75 117.227ZM1637.98 115.722C1638.65 115.722 1639.22 115.546 1639.68 115.196C1640.14 114.841 1640.5 114.351 1640.74 113.726C1640.98 113.096 1641.1 112.369 1641.1 111.545C1641.1 110.731 1640.98 110.018 1640.75 109.408C1640.51 108.792 1640.16 108.314 1639.7 107.973C1639.23 107.627 1638.66 107.455 1637.98 107.455C1637.27 107.455 1636.67 107.637 1636.2 108.001C1635.73 108.361 1635.38 108.851 1635.14 109.472C1634.91 110.087 1634.79 110.778 1634.79 111.545C1634.79 112.322 1634.91 113.027 1635.15 113.662C1635.39 114.292 1635.75 114.794 1636.22 115.168C1636.69 115.537 1637.28 115.722 1637.98 115.722ZM1650.63 117.227C1649.57 117.227 1648.67 116.995 1647.91 116.531C1647.15 116.062 1646.56 115.409 1646.15 114.571C1645.74 113.728 1645.54 112.748 1645.54 111.631C1645.54 110.513 1645.74 109.528 1646.15 108.676C1646.56 107.819 1647.14 107.152 1647.87 106.673C1648.61 106.19 1649.47 105.949 1650.46 105.949C1651.02 105.949 1651.58 106.044 1652.14 106.233C1652.69 106.422 1653.2 106.73 1653.65 107.156C1654.11 107.578 1654.47 108.136 1654.74 108.832C1655.01 109.528 1655.14 110.385 1655.14 111.403V112.114H1646.73V110.665H1653.44C1653.44 110.049 1653.31 109.5 1653.07 109.017C1652.83 108.534 1652.48 108.153 1652.03 107.874C1651.59 107.594 1651.06 107.455 1650.46 107.455C1649.79 107.455 1649.21 107.62 1648.72 107.952C1648.24 108.278 1647.87 108.705 1647.61 109.23C1647.35 109.756 1647.22 110.319 1647.22 110.92V111.886C1647.22 112.71 1647.36 113.409 1647.64 113.982C1647.93 114.55 1648.33 114.983 1648.84 115.281C1649.35 115.575 1649.95 115.722 1650.63 115.722C1651.07 115.722 1651.46 115.66 1651.82 115.537C1652.18 115.409 1652.49 115.22 1652.75 114.969C1653.01 114.713 1653.21 114.396 1653.35 114.017L1654.97 114.472C1654.8 115.021 1654.52 115.504 1654.11 115.92C1653.71 116.332 1653.21 116.654 1652.62 116.886C1652.03 117.114 1651.36 117.227 1650.63 117.227ZM1659.37 102.455V117H1657.69V102.455H1659.37Z",
         },
       },
     ],
@@ -148,6 +378,7 @@ export const keyboardSvgData = {
     keys: [
       {
         id: "key-escape",
+        keyIdentifier: "Escape",
         rect: {
           width: 96,
           height: 96,
@@ -163,79 +394,399 @@ export const keyboardSvgData = {
       // ... 其他按键数据将从 SVG 文件中提取
     ],
   },
+
+  // 按键通用样式
+  keyStyle: KEY_STYLES,
+  // Windows 键盘布局
+  windows: {
+    layout: {
+      // 标准按键尺寸
+      standard: {
+        width: 96,
+        height: 96,
+      },
+
+      // 特殊按键尺寸
+      special: {
+        // 功能区
+        Escape: { width: 168, height: 96 },
+
+        // 主键区
+        Backspace: { width: 168, height: 96 },
+        Tab: { width: 168, height: 96 },
+        CapsLock: { width: 192, height: 96 },
+        Enter: { width: 180, height: 96 },
+        ShiftLeft: { width: 240, height: 96 },
+        ShiftRight: { width: 240, height: 96 },
+
+        // 底部区
+        Space: { width: 596, height: 96 },
+
+        // 方向键区
+        ArrowUp: { width: 96, height: 46 },
+        ArrowDown: { width: 96, height: 46 },
+      },
+      // 每行的基础配置
+      rows: [
+        {
+          y: 40, // 功能键行
+          spacing: 8,
+          keys: [
+            "Escape",
+            "F1",
+            "F2",
+            "F3",
+            "F4",
+            "F5",
+            "F6",
+            "F7",
+            "F8",
+            "F9",
+            "F10",
+            "F11",
+            "F12",
+            "Delete",
+          ],
+        },
+        {
+          y: 148, // 数字键行
+          spacing: 8,
+          keys: [
+            "`",
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9",
+            "0",
+            "-",
+            "=",
+            "Backspace",
+          ],
+        },
+        {
+          y: 256, // 第一字母行
+          spacing: 8,
+          keys: [
+            "Tab",
+            "Q",
+            "W",
+            "E",
+            "R",
+            "T",
+            "Y",
+            "U",
+            "I",
+            "O",
+            "P",
+            "[",
+            "]",
+            "\\",
+          ],
+        },
+        {
+          y: 364, // 第二字母行
+          spacing: 8,
+          keys: [
+            "CapsLock",
+            "A",
+            "S",
+            "D",
+            "F",
+            "G",
+            "H",
+            "J",
+            "K",
+            "L",
+            ";",
+            "'",
+            "Enter",
+          ],
+        },
+        {
+          y: 472, // 第三字母行
+          spacing: 8,
+          keys: [
+            "ShiftLeft",
+            "Z",
+            "X",
+            "C",
+            "V",
+            "B",
+            "N",
+            "M",
+            ",",
+            ".",
+            "/",
+            "ShiftRight",
+          ],
+        },
+        {
+          y: 580, // 底部控制键行
+          spacing: 8,
+          keys: [
+            "CtrlLeft",
+            "Win",
+            "AltLeft",
+            "Space",
+            "AltRight",
+            "Win",
+            "CtrlRight",
+            "ArrowLeft",
+            "ArrowUp",
+            "ArrowDown",
+            "ArrowRight",
+          ],
+        },
+      ],
+
+      // 特殊宽度按键
+      specialWidths: {
+        Backspace: 168,
+        Tab: 168,
+        CapsLock: 192,
+        Enter: 180,
+        ShiftLeft: 240,
+        ShiftRight: 240,
+        CtrlLeft: 120,
+        CtrlRight: 120,
+        Win: 120,
+        AltLeft: 120,
+        AltRight: 120,
+        Space: 596,
+      },
+    },
+  },
 };
 
-// 键盘布局常量
-export const keyboardLayout = {
-  // 按键间距
-  spacing: {
-    horizontal: 8,
-    vertical: 8,
-  },
-  // 按键尺寸
-  keySize: {
-    // 标准按键尺寸
-    standard: { width: 96, height: 96 },
-
-    // 共同的特殊尺寸按键
-    esc: { width: 168, height: 96 },
-    tab: { width: 168, height: 96 },
-    capslock: { width: 192, height: 96 },
-    shiftLeft: { width: 240, height: 96 },
-    shiftRight: { width: 240, height: 96 },
-    arrowUp: { width: 96, height: 46 },
-    arrowDown: { width: 96, height: 46 },
-
-    // Windows特有的按键尺寸
-    windows: {
-      backspace: { width: 168, height: 96 },
-      enter: { width: 180, height: 96 },
-      space: { width: 596, height: 96 },
-    },
-
-    // Mac特有的按键尺寸
-    mac: {
-      delete: { width: 168, height: 96 },
-      return: { width: 180, height: 96 },
-      commandLeft: { width: 144, height: 96 },
-      commandRight: { width: 144, height: 96 },
-      space: { width: 504, height: 96 },
-    },
-  },
-  // 键盘外壳
+// 1. 基础常量定义
+const KEYBOARD_DIMENSIONS = {
+  viewBox: { width: 1782, height: 738, x: 0, y: 0 },
   case: {
     width: 1782,
     height: 738,
-    padding: {
-      top: 40,
-      left: 105,
-    },
+    padding: { top: 40, left: 105 },
+  },
+};
+
+// 按键样式常量
+const KEY_STYLES = {
+  default: {
+    fill: "#F1F1EF",
+    textFill: "#545454",
+    rx: 8,
+    filter: "url(#filter_ddi)",
+    shapeRendering: "crispEdges",
+    transition: "all 0.2s ease",
+  },
+  hover: {
+    fill: "#E5E5E3", // 颜色变深 5%
+    textFill: "#404040",
+    filter: "url(#filter_ddi_hover)",
+  },
+  active: {
+    fill: "#D9D9D7", // 颜色变深 10%
+    textFill: "#333333",
+    transform: "translateY(1px)",
+  },
+};
+
+// 统一的按键尺寸配置
+const KEY_SIZES = {
+  // 标准按键
+  standard: { width: 96, height: 96 },
+
+  // 特殊按键(通用)
+  special: {
+    Escape: { width: 168, height: 96 },
+    Tab: { width: 168, height: 96 },
+    CapsLock: { width: 192, height: 96 },
+    ShiftLeft: { width: 240, height: 96 },
+    ShiftRight: { width: 240, height: 96 },
+    ArrowUp: { width: 96, height: 46 },
+    ArrowDown: { width: 96, height: 46 },
+  },
+
+  // Windows 特有
+  windows: {
+    ControlLeft: { width: 96, height: 96 },
+    ControlRight: { width: 96, height: 96 },
+    MetaLeft: { width: 96, height: 96 },
+    MetaRight: { width: 96, height: 96 },
+    AltLeft: { width: 96, height: 96 },
+    AltRight: { width: 96, height: 96 },
+    Space: { width: 596, height: 96 },
+    Backspace: { width: 168, height: 96 },
+    Enter: { width: 180, height: 96 },
+  },
+
+  // Mac 特有
+  mac: {
+    Backspace: { width: 168, height: 96 },
+    Enter: { width: 180, height: 96 },
+    MetaLeft: { width: 144, height: 96 },
+    MetaRight: { width: 144, height: 96 },
+    Space: { width: 504, height: 96 },
+  },
+};
+
+// 统一的键盘布局配置
+const KEYBOARD_LAYOUT = {
+  spacing: { horizontal: 8, vertical: 8 },
+  // 键盘行配置
+  rows: {
+    windows: [
+      {
+        y: 40, // 功能键行
+        keys: [
+          "Escape",
+          "F1",
+          "F2",
+          "F3",
+          "F4",
+          "F5",
+          "F6",
+          "F7",
+          "F8",
+          "F9",
+          "F10",
+          "F11",
+          "F12",
+          "Delete",
+        ],
+      },
+      {
+        y: 148, // 数字键行
+        spacing: 8,
+        keys: [
+          "`",
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6",
+          "7",
+          "8",
+          "9",
+          "0",
+          "-",
+          "=",
+          "Backspace",
+        ],
+      },
+      {
+        y: 256, // 第一字母行
+        spacing: 8,
+        keys: [
+          "Tab",
+          "Q",
+          "W",
+          "E",
+          "R",
+          "T",
+          "Y",
+          "U",
+          "I",
+          "O",
+          "P",
+          "[",
+          "]",
+          "\\",
+        ],
+      },
+      {
+        y: 364, // 第二字母行
+        spacing: 8,
+        keys: [
+          "CapsLock",
+          "A",
+          "S",
+          "D",
+          "F",
+          "G",
+          "H",
+          "J",
+          "K",
+          "L",
+          ";",
+          "'",
+          "Enter",
+        ],
+      },
+      {
+        y: 472, // 第三字母行
+        spacing: 8,
+        keys: [
+          "ShiftLeft",
+          "Z",
+          "X",
+          "C",
+          "V",
+          "B",
+          "N",
+          "M",
+          ",",
+          ".",
+          "/",
+          "ShiftRight",
+        ],
+      },
+      {
+        y: 580, // 底部控制键行
+        spacing: 8,
+        keys: [
+          "ControlLeft",
+          "MetaLeft",
+          "AltLeft",
+          "Space",
+          "AltRight",
+          "MetaRight",
+          "ControlRight",
+          "ArrowLeft",
+          "ArrowUp",
+          "ArrowDown",
+          "ArrowRight",
+        ],
+      },
+    ],
+    mac: [
+      // Mac 键盘行配置
+    ],
   },
   // 底部按键布局
   bottomRow: {
     windows: [
-      { id: "ctrl-left", size: "narrow", text: "ctrl" },
-      { id: "win-left", size: "narrow", text: "win" },
-      { id: "alt-left", size: "narrow", text: "alt" },
-      { id: "space", size: "spaceWindows", text: "" },
-      { id: "alt-right", size: "narrow", text: "alt" },
-      { id: "win-right", size: "narrow", text: "win" },
-      { id: "ctrl-right", size: "narrow", text: "ctrl" },
-      { id: "arrow-left", size: "standard", text: "←" },
-      { id: "arrow-updown", size: "half", text: "↑↓" },
-      { id: "arrow-right", size: "standard", text: "→" },
+      { id: "ctrl-left" },
+      { id: "win" },
+      { id: "alt-left" },
+      { id: "space" },
+      { id: "alt-right" },
+      { id: "win" },
+      { id: "ctrl-right" },
+      { id: "arrow-left" },
+      { id: "arrow-up" },
+      { id: "arrow-down" },
+      { id: "arrow-right" },
     ],
     mac: [
-      { id: "fn", size: "narrow", text: "fn" },
-      { id: "control", size: "narrow", text: "control" },
-      { id: "option-left", size: "narrow", text: "option" },
-      { id: "command-left", size: "narrow", text: "command" },
-      { id: "space", size: "spaceMac", text: "" },
-      { id: "command-right", size: "narrow", text: "command" },
-      { id: "option-right", size: "narrow", text: "option" },
-      { id: "arrow-left", size: "standard", text: "←" },
-      { id: "arrow-updown", size: "half", text: "↑↓" },
-      { id: "arrow-right", size: "standard", text: "→" },
+      { id: "fn" },
+      { id: "control" },
+      { id: "option-left" },
+      { id: "command-left" },
+      { id: "space" },
+      { id: "command-right" },
+      { id: "option-right" },
+      { id: "arrow-left" },
+      { id: "arrow-up" },
+      { id: "arrow-down" },
+      { id: "arrow-right" },
     ],
   },
 };
+
+export { KEY_SIZES, KEYBOARD_LAYOUT, KEY_STYLES, KEYBOARD_DIMENSIONS };
