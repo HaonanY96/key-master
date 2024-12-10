@@ -1,7 +1,6 @@
 "use client";
 
 import BaseKeyboard from "./base-keyboard";
-import { keyMappings } from "./keyboard-data";
 
 export default function WindowsKeyboard({
   activeKeys = [],

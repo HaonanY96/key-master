@@ -2,10 +2,12 @@
 
 import { useState, useEffect } from "react";
 import WindowsKeyboard from "./windows-keyboard";
-import MacKeyboard from "./mac-keyboard";
-import { shortcutGroups } from "./keyboard-data";
+import {
+  shortcutGroups,
+  getAllShortcuts,
+} from "../../app/shortcuts/shortcut-groups";
 
-export default function KeyboardVisualizer({ platform = "windows" }) {
+export default function KeyboardVisualizer() {
   const [activeKeys, setActiveKeys] = useState([]);
   const [currentShortcut, setCurrentShortcut] = useState(null);
   const [isPlaying, setIsPlaying] = useState(true);
@@ -26,12 +28,9 @@ export default function KeyboardVisualizer({ platform = "windows" }) {
     return () => clearInterval(interval);
   }, [isPlaying]);
 
-  const KeyboardComponent =
-    platform === "windows" ? WindowsKeyboard : MacKeyboard;
-
   return (
     <div className="relative">
-      <KeyboardComponent
+      <WindowsKeyboard
         activeKeys={activeKeys}
         className="w-full max-w-4xl mx-auto"
       />
@@ -47,8 +46,14 @@ export default function KeyboardVisualizer({ platform = "windows" }) {
 
       {currentShortcut && (
         <div className="mt-4 text-center">
-          <div className="text-lg">
-            {currentShortcut.keys.join(" + ")} - {currentShortcut.description}
+          <div className="text-lg font-medium">
+            {currentShortcut.description}
+          </div>
+          <div className="text-sm text-gray-600 mt-1">
+            {currentShortcut.tooltip}
+          </div>
+          <div className="text-xs text-gray-500 mt-1">
+            {currentShortcut.usage}
           </div>
         </div>
       )}

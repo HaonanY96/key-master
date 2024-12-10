@@ -1,34 +1,52 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { keyboardStyles, keyPositionMap } from "./keyboard-data";
-
-// 键盘按键变体动画
-const keyVariants = keyboardStyles.variants;
+import {
+  KEYBOARD_DIMENSIONS,
+  KEY_STYLES,
+  KEY_SIZES,
+  KEYBOARD_LAYOUT,
+  KEY_DISPLAY,
+  KEY_ID_MAP,
+} from "./keyboard-layout";
 
 export default function BaseKeyboard({
   activeKeys = [],
   className,
   keyMap = {},
-  keyboardType, // 用于区分 Windows/Mac
+  keyboardType = "windows", // 用于区分 Windows/Mac
   ...props
 }) {
   // 判断按键是否需要高亮
   const isKeyHighlighted = (keyId) => {
-    const mappedKey = keyPositionMap[keyboardType]?.[keyId];
-    return mappedKey && activeKeys.includes(mappedKey);
+    return activeKeys.includes(keyId);
   };
 
   // 获取按键显示文本
   const getKeyLabel = (keyId) => {
-    const mappedKey = keyPositionMap[keyboardType]?.[keyId];
-    return mappedKey ? keyMap[mappedKey] || mappedKey : keyId;
+    const platformSpecific = KEY_DISPLAY[keyboardType]?.[keyId];
+    const common = KEY_DISPLAY.common[keyId];
+    return (platformSpecific || common)?.primary || keyId;
+  };
+
+  // 获取按键次要显示文本
+  const getKeySecondaryLabel = (keyId) => {
+    return KEY_DISPLAY.common[keyId]?.secondary;
+  };
+
+  // 获取按键尺寸
+  const getKeySize = (keyId) => {
+    return (
+      KEY_SIZES[keyboardType]?.[keyId] ||
+      KEY_SIZES.special[keyId] ||
+      KEY_SIZES.standard
+    );
   };
 
   // 渲染单个按键组
   const renderKeyGroup = (keyId, children) => {
     return (
-      <motion.g key={keyId} id={keyId}>
+      <motion.g key={keyId} id={KEY_ID_MAP[keyboardType][keyId]}>
         {children}
       </motion.g>
     );
@@ -36,26 +54,33 @@ export default function BaseKeyboard({
 
   // 渲染按键背景
   const renderKeyBackground = (keyId, props) => {
+    const keyStyle = isKeyHighlighted(keyId)
+      ? KEY_STYLES.highlighted
+      : KEY_STYLES.default;
     return (
       <motion.rect
         {...props}
-        variants={keyVariants}
-        animate={isKeyHighlighted(keyId) ? "highlighted" : "initial"}
+        {...keyStyle}
+        whileHover={KEY_STYLES.hover}
+        whileTap={KEY_STYLES.active}
       />
     );
   };
 
   // 渲染按键文字
   const renderKeyText = (keyId, props) => {
+    const keyStyle = isKeyHighlighted(keyId)
+      ? KEY_STYLES.highlighted
+      : KEY_STYLES.default;
     return (
-      <motion.path
+      <motion.text
         {...props}
-        fill={keyboardStyles.keyText.fill}
-        initial={{ fill: keyboardStyles.keyText.fill }}
-        animate={{
-          fill: isKeyHighlighted(keyId)
-            ? "#FFFFFF"
-            : keyboardStyles.keyText.fill,
+        fill={keyStyle.textFill}
+        style={{
+          userSelect: "none",
+          fontFamily: "Inter, sans-serif",
+          fontSize: "14px",
+          fontWeight: 500,
         }}
       />
     );
@@ -64,9 +89,9 @@ export default function BaseKeyboard({
   return (
     <motion.svg
       className={className}
-      width={keyboardStyles.keyboard.width}
-      height={keyboardStyles.keyboard.height}
-      viewBox={keyboardStyles.keyboard.viewBox}
+      width={KEYBOARD_DIMENSIONS.case.width}
+      height={KEYBOARD_DIMENSIONS.case.height}
+      viewBox={`${KEYBOARD_DIMENSIONS.viewBox.x} ${KEYBOARD_DIMENSIONS.viewBox.y} ${KEYBOARD_DIMENSIONS.viewBox.width} ${KEYBOARD_DIMENSIONS.viewBox.height}`}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -80,18 +105,30 @@ export default function BaseKeyboard({
       {/* 键盘主体 */}
       <g filter="url(#filter2_dd)">
         <rect
-          x="81"
-          y="24"
-          width="1620"
-          height="684"
+          x={KEYBOARD_DIMENSIONS.case.padding.left}
+          y={KEYBOARD_DIMENSIONS.case.padding.top}
+          width={
+            KEYBOARD_DIMENSIONS.case.width -
+            KEYBOARD_DIMENSIONS.case.padding.left * 2
+          }
+          height={
+            KEYBOARD_DIMENSIONS.case.height -
+            KEYBOARD_DIMENSIONS.case.padding.top * 2
+          }
           rx="16"
-          fill={keyboardStyles.keyboard.background}
+          fill="#C0C0C0"
         />
         <rect
-          x="81"
-          y="24"
-          width="1620"
-          height="684"
+          x={KEYBOARD_DIMENSIONS.case.padding.left}
+          y={KEYBOARD_DIMENSIONS.case.padding.top}
+          width={
+            KEYBOARD_DIMENSIONS.case.width -
+            KEYBOARD_DIMENSIONS.case.padding.left * 2
+          }
+          height={
+            KEYBOARD_DIMENSIONS.case.height -
+            KEYBOARD_DIMENSIONS.case.padding.top * 2
+          }
           rx="16"
           fill="url(#paint0_linear)"
           fillOpacity="0.3"
@@ -100,24 +137,45 @@ export default function BaseKeyboard({
 
       {/* 按键组 */}
       <g>
-        {/* 示例：渲染 Escape 键 */}
-        {renderKeyGroup(
-          "key-escape",
-          <>
-            {renderKeyBackground("key-escape", {
-              width: keyboardStyles.keySize.standard.width,
-              height: keyboardStyles.keySize.standard.height,
-              rx: keyboardStyles.keyBase.rx,
-              x: 105,
-              y: 40,
-            })}
-            {renderKeyText("key-escape", {
-              d: "M...", // 这里需要实际的路径数据
-            })}
-          </>
-        )}
+        {KEYBOARD_LAYOUT.rows[keyboardType].map((row, rowIndex) => (
+          <g key={rowIndex}>
+            {row.keys.map((keyId, keyIndex) => {
+              const keySize = getKeySize(keyId);
+              const x =
+                KEYBOARD_DIMENSIONS.case.padding.left +
+                keyIndex * (keySize.width + KEYBOARD_LAYOUT.spacing.horizontal);
+              const y = row.y;
 
-        {/* 这里需要添加所有其他按键的渲染 */}
+              return renderKeyGroup(
+                keyId,
+                <>
+                  {renderKeyBackground(keyId, {
+                    width: keySize.width,
+                    height: keySize.height,
+                    rx: KEY_STYLES.default.rx,
+                    x,
+                    y,
+                  })}
+                  {renderKeyText(keyId, {
+                    x: x + keySize.width / 2,
+                    y: y + keySize.height / 2,
+                    textAnchor: "middle",
+                    dominantBaseline: "middle",
+                    children: getKeyLabel(keyId),
+                  })}
+                  {getKeySecondaryLabel(keyId) &&
+                    renderKeyText(keyId, {
+                      x: x + keySize.width / 2,
+                      y: y + keySize.height / 3,
+                      textAnchor: "middle",
+                      dominantBaseline: "middle",
+                      children: getKeySecondaryLabel(keyId),
+                    })}
+                </>
+              );
+            })}
+          </g>
+        ))}
       </g>
 
       {/* 渐变定义 */}
@@ -138,3 +196,16 @@ export default function BaseKeyboard({
     </motion.svg>
   );
 }
+
+BaseKeyboard.propTypes = {
+  activeKeys: PropTypes.arrayOf(PropTypes.string),
+  className: PropTypes.string,
+  keyMap: PropTypes.object,
+  keyboardType: PropTypes.oneOf(["windows", "mac"]),
+};
+
+BaseKeyboard.defaultProps = {
+  activeKeys: [],
+  keyMap: {},
+  keyboardType: "windows",
+};
