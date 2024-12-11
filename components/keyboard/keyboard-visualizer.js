@@ -5,7 +5,7 @@ import WindowsKeyboard from "./windows-keyboard";
 import {
   shortcutGroups,
   getAllShortcuts,
-} from "../../app/shortcuts/shortcut-groups";
+} from "../../app/shortcuts/demo-shortcut-groups";
 
 export default function KeyboardVisualizer() {
   const [activeKeys, setActiveKeys] = useState([]);
