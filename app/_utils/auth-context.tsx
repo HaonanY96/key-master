@@ -19,15 +19,19 @@ interface AuthContextType {
   firebaseSignOut: () => Promise<void>;
 }
 
-interface AuthContextProviderProps {
-  children: ReactNode;
-}
-
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
+export function useUserAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useUserAuth must be used within an AuthContextProvider");
+  }
+  return context;
+}
+
+export function AuthContextProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const updateUserProfile = async (user: User): Promise<void> => {
     if (!user) return;
@@ -71,6 +75,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (currentUser) => {
+      setUser(currentUser);
+      setLoading(false);
+
       if (currentUser) {
         try {
           await updateUserProfile(currentUser);
@@ -78,42 +85,21 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
           console.error("Error updating user profile:", error);
         }
       }
-      setUser(currentUser);
-      setLoading(false);
     });
 
-    return () => unsubscribe();
+    const timeout = setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+
+    return () => {
+      unsubscribe();
+      clearTimeout(timeout);
+    };
   }, []);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-gray-900"></div>
-        <span className="ml-2 text-gray-600">Loading authentication status...</span>
-      </div>
-    );
-  }
-
-  const value = {
-    user,
-    loading,
-    gitHubSignIn,
-    firebaseSignOut,
-  };
-
   return (
-    <AuthContext.Provider value={value}>
-      {!loading && children}
+    <AuthContext.Provider value={{ user, loading, gitHubSignIn, firebaseSignOut }}>
+      {children}
     </AuthContext.Provider>
   );
-};
-
-export const useUserAuth = () => {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useUserAuth must be used within an AuthContextProvider");
-  }
-  return context;
-};
-
-export const useAuth = useUserAuth;
+}

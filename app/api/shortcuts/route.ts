@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { shortcutsByPlatform, shortcuts } from '@/lib/shortcuts/data/shortcuts';
-import { calculateSimilarity } from '@/lib/shortcuts/utils/search';
+import { FunctionType } from '@/lib/shortcuts/types/common';
 
 export const dynamic = 'force-dynamic';
 
@@ -9,84 +9,56 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const platform = searchParams.get('platform') || 'windows';
     const category = searchParams.get('category');
-    const software = searchParams.get('software');
-    const query = searchParams.get('query');
-    const page = parseInt(searchParams.get('page') || '1');
-    if (page < 1) {
-      return NextResponse.json({
-        success: false,
-        error: 'Page number must be greater than 0'
-      }, { status: 400 });
-    }
-    const limit = parseInt(searchParams.get('limit') || '20');
-    if (limit < 1 || limit > 100) {
-      return NextResponse.json({
-        success: false,
-        error: 'Limit must be between 1 and 100'
-      }, { status: 400 });
-    }
-    const sort = searchParams.get('sort');
-    if (sort && !['popularity', 'complexity', 'name'].includes(sort)) {
-      return NextResponse.json({
-        success: false,
-        error: 'Invalid sort parameter'
-      }, { status: 400 });
-    }
-
+    
+    // 获取基础数据
     let results = platform === 'windows' 
       ? [...shortcutsByPlatform.windows.system] 
       : [...shortcuts];
 
     // 按分类筛选
     if (category) {
-      results = results.filter(shortcut => shortcut.category === category);
-    }
+      // 确保大小写匹配
+      const normalizedCategory = category.toLowerCase();
+      results = results.filter(shortcut => 
+        shortcut.category?.toLowerCase() === normalizedCategory
+      );
 
-    // 按软件筛选
-    if (software) {
-      results = results.filter(shortcut => shortcut.software === software);
-    }
+      // 如果没有找到结果，尝试使用 FunctionType 匹配
+      if (results.length === 0) {
+        const functionTypeKey = Object.entries(FunctionType).find(
+          ([_, value]) => value.toLowerCase() === normalizedCategory
+        )?.[0];
 
-    // 搜索
-    if (query) {
-      results = results.filter(shortcut => {
-        const nameMatch = calculateSimilarity(shortcut.name.toLowerCase(), query.toLowerCase()) > 0.7;
-        const descMatch = calculateSimilarity(shortcut.description.toLowerCase(), query.toLowerCase()) > 0.7;
-        return nameMatch || descMatch;
-      });
-    }
-
-    // 排序
-    if (sort) {
-      results.sort((a, b) => {
-        switch (sort) {
-          case 'popularity':
-            return (b.metadata?.popularity || 'low').localeCompare(a.metadata?.popularity || 'low');
-          case 'complexity':
-            return (a.metadata?.complexity || 'basic').localeCompare(b.metadata?.complexity || 'basic');
-          case 'name':
-            return a.name.localeCompare(b.name);
-          default:
-            return 0;
+        if (functionTypeKey) {
+          results = results.filter(shortcut => 
+            shortcut.category === FunctionType[functionTypeKey as keyof typeof FunctionType]
+          );
         }
-      });
+      }
     }
 
-    // 分页
-    const total = results.length;
-    const totalPages = Math.ceil(total / limit);
-    const start = (page - 1) * limit;
-    const end = start + limit;
-    results = results.slice(start, end);
+    // 构建分组数据
+    const groups = results.reduce<Record<string, any>>((acc, shortcut) => {
+      const category = shortcut.category as string;
+      if (!acc[category]) {
+        acc[category] = {
+          id: category,
+          name: category,
+          description: `${category} shortcuts`,
+          shortcuts: []
+        };
+      }
+      acc[category as string].shortcuts.push(shortcut);
+      return acc;
+    }, {});
 
     return NextResponse.json({
       success: true,
       data: results,
+      groups: groups,
       metadata: {
-        total,
-        currentPage: page,
-        totalPages,
-        limit
+        total: results.length,
+        categories: Object.keys(groups)
       }
     });
 

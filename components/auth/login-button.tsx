@@ -5,11 +5,12 @@ import { useState } from "react";
 import { FaGithub } from "react-icons/fa";
 
 export default function LoginButton() {
-  const { gitHubSignIn } = useUserAuth();
+  const { gitHubSignIn, user } = useUserAuth();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
   const handleLogin = async (): Promise<void> => {
+    if (isLoading) return;
     setIsLoading(true);
     setError(null);
     try {
@@ -21,6 +22,8 @@ export default function LoginButton() {
       setIsLoading(false);
     }
   };
+
+  if (user) return null;
 
   return (
     <div>

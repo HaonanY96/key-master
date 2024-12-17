@@ -24,7 +24,7 @@ export function ShortcutList({
   layout = 'list',
   showGroupInfo = true,
   animated = false,
-  platform,
+  platform = 'windows',
   category 
 }: ShortcutListProps) {
   const [expandedId, setExpandedId] = useState<string | null>(null);
@@ -34,13 +34,19 @@ export function ShortcutList({
   
   useEffect(() => {
     async function fetchData() {
-      if (!groups && !shortcuts && (platform || category)) {
+      if (!groups && !shortcuts) {
         try {
           setIsLoading(true);
           setError(null);
-          const data = await getShortcuts({ platform, category });
-          setFetchedGroups(Object.values(data.groups));
+          const data = await getShortcuts({ 
+            platform, 
+            category: category?.toUpperCase()
+          });
+          if (data.groups) {
+            setFetchedGroups(Object.values(data.groups));
+          }
         } catch (err) {
+          console.error('Error fetching shortcuts:', err);
           setError(err instanceof Error ? err.message : 'Failed to fetch shortcuts');
         } finally {
           setIsLoading(false);

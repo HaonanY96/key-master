@@ -6,7 +6,7 @@ export default function HomePage() {
   return (
     <main className="min-h-screen bg-page-bg text-text-primary">
       <Hero />
-      <SearchModal />
+      {/* <SearchModal /> */}
     </main>
   )
 }

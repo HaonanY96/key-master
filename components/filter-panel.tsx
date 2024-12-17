@@ -27,9 +27,11 @@ const CATEGORY_NAMES: Record<keyof typeof FunctionType, string> = {
 export function FilterPanel() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const currentCategory = searchParams.get('category');
   
-  const handleCategoryClick = (category: keyof typeof FunctionType) => {
-    router.push(`/shortcuts/${FunctionType[category].toLowerCase()}`);
+  const handleCategoryClick = (key: keyof typeof FunctionType) => {
+    const categoryValue = FunctionType[key].toLowerCase();
+    router.push(`/categories?category=${categoryValue}`);
   };
   
   return (
@@ -37,15 +39,22 @@ export function FilterPanel() {
       <h2 className="text-xl font-bold text-text-primary mb-4">Categories</h2>
       
       <div className="space-y-1.5">
-        {Object.entries(FunctionType).map(([key, value]) => (
-          <button
-            key={key}
-            onClick={() => handleCategoryClick(key as keyof typeof FunctionType)}
-            className="w-full text-left px-4 py-2.5 rounded-md text-text-secondary hover:text-text-primary hover:bg-highlight/5 focus:bg-highlight/10 transition-colors"
-          >
-            {CATEGORY_NAMES[key as keyof typeof FunctionType]}
-          </button>
-        ))}
+        {Object.entries(CATEGORY_NAMES).map(([key, name]) => {
+          const categoryValue = FunctionType[key as keyof typeof FunctionType].toLowerCase();
+          return (
+            <button
+              key={key}
+              onClick={() => handleCategoryClick(key as keyof typeof FunctionType)}
+              className={`w-full text-left px-4 py-2.5 rounded-md transition-colors
+                ${currentCategory === categoryValue
+                  ? 'bg-highlight/10 text-text-primary'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-highlight/5'
+                }`}
+            >
+              {name}
+            </button>
+          );
+        })}
       </div>
     </div>
   );

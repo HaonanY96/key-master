@@ -11,8 +11,21 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-const app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+// 检查环境变量是否存在
+if (!firebaseConfig.apiKey) {
+  console.error('Firebase API Key is missing');
+}
+
+// 确保只初始化一次
+let app;
+try {
+  app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+} catch (error) {
+  console.error('Firebase initialization error:', error);
+  throw error;
+}
+
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-export { app, auth, db };
+export { app, auth, db }; 

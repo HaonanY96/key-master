@@ -45,22 +45,22 @@ interface GetShortcutsOptions {
 }
 
 export async function getShortcuts(options: GetShortcutsOptions = {}) {
-  // Import local data
-  const { windowsSystemShortcuts } = await import('./data/windows/system');
+  const params = new URLSearchParams();
   
-  // Filter data based on platform and category
-  if (options.platform === 'windows') {
-    return windowsSystemShortcuts;
+  if (options.platform) params.append('platform', options.platform);
+  if (options.category) params.append('category', options.category);
+  if (options.software) params.append('software', options.software);
+  
+  const baseUrl = getBaseUrl();
+  const url = `${baseUrl}/api/shortcuts${params.toString() ? `?${params.toString()}` : ''}`;
+  
+  const res = await fetch(url);
+  if (!res.ok) throw new Error('Failed to fetch shortcuts');
+  
+  const data = await res.json();
+  if (!data.success) {
+    throw new Error(data.error || 'Failed to fetch shortcuts');
   }
   
-  // Return empty data if no platform specified
-  return {
-    metadata: {
-      version: "1.0.0",
-      platform: "",
-      lastUpdated: new Date().toISOString(),
-      totalShortcuts: 0,
-    },
-    groups: {}
-  };
+  return data;
 } 

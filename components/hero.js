@@ -76,10 +76,10 @@ export default function Hero() {
             </p>
             <div className="mt-8 sm:mt-10">
               <Link
-                href="/search"
+                href="/categories"
                 className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-highlight hover:bg-highlight/90 transition-colors"
               >
-                Explore Shortcuts
+                Explore Categories
               </Link>
             </div>
           </div>
