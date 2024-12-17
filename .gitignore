@@ -47,3 +47,12 @@ next-env.d.ts
 
 # Development notes
 /Reference
+
+# Cursor rules
+.cursorrules
+
+# Scripts
+/scripts
+
+# test
+/__tests__

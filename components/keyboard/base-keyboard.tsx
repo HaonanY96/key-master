@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { ReactNode } from "react";
 import {
   KEYBOARD_DIMENSIONS,
   KEY_STYLES,
@@ -8,34 +9,84 @@ import {
   KEYBOARD_LAYOUT,
   KEY_DISPLAY,
   KEY_ID_MAP,
-} from "./keyboard-layout";
+} from "./keyboard-constants-layout.js";
+
+type KeyboardType = 'windows' | 'mac';
+
+interface KeyStyle {
+  fill: string;
+  stroke: string;
+  textFill: string;
+  rx: number;
+}
+
+interface BaseKeyboardProps {
+  activeKeys?: string[];
+  className?: string;
+  keyMap?: Record<string, string>;
+  keyboardType?: KeyboardType;
+}
+
+interface KeyBackgroundProps {
+  width: number;
+  height: number;
+  rx: number;
+  x: number;
+  y: number;
+}
+
+interface KeyTextProps {
+  x: number;
+  y: number;
+  textAnchor?: string;
+  dominantBaseline?: string;
+  children: ReactNode;
+}
+
+// 添加类型定义
+interface KeyboardRow {
+  y: number;
+  spacing?: number;
+  keys: string[];
+}
+
+interface KeyboardLayout {
+  rows: {
+    windows: KeyboardRow[];
+    mac: KeyboardRow[];
+  };
+  spacing: {
+    horizontal: number;
+    vertical: number;
+  };
+}
+
+const getKeyId = (keyboardType: KeyboardType, keyId: string): string => {
+  return (KEY_ID_MAP[keyboardType] as Record<string, string>)[keyId] || keyId;
+};
 
 export default function BaseKeyboard({
   activeKeys = [],
   className,
   keyMap = {},
-  keyboardType = "windows", // 用于区分 Windows/Mac
+  keyboardType = "windows",
   ...props
-}) {
-  // 判断按键是否需要高亮
-  const isKeyHighlighted = (keyId) => {
+}: BaseKeyboardProps) {
+  const isKeyHighlighted = (keyId: string): boolean => {
     return activeKeys.includes(keyId);
   };
 
-  // 获取按键显示文本
-  const getKeyLabel = (keyId) => {
+  const getKeyLabel = (keyId: string): string => {
     const platformSpecific = KEY_DISPLAY[keyboardType]?.[keyId];
     const common = KEY_DISPLAY.common[keyId];
     return (platformSpecific || common)?.primary || keyId;
   };
 
-  // 获取按键次要显示文本
-  const getKeySecondaryLabel = (keyId) => {
+  const getKeySecondaryLabel = (keyId: string): string | undefined => {
     return KEY_DISPLAY.common[keyId]?.secondary;
   };
 
-  // 获取按键尺寸
-  const getKeySize = (keyId) => {
+  const getKeySize = (keyId: string) => {
     return (
       KEY_SIZES[keyboardType]?.[keyId] ||
       KEY_SIZES.special[keyId] ||
@@ -43,32 +94,33 @@ export default function BaseKeyboard({
     );
   };
 
-  // 渲染单个按键组
-  const renderKeyGroup = (keyId, children) => {
+  const renderKeyGroup = (keyId: string, children: React.ReactNode) => {
     return (
-      <motion.g key={keyId} id={KEY_ID_MAP[keyboardType][keyId]}>
+      <motion.g key={keyId} id={getKeyId(keyboardType, keyId)}>
         {children}
       </motion.g>
     );
   };
 
-  // 渲染按键背景
-  const renderKeyBackground = (keyId, props) => {
+  const renderKeyBackground = (keyId: string, props: KeyBackgroundProps) => {
     const keyStyle = isKeyHighlighted(keyId)
       ? KEY_STYLES.highlighted
       : KEY_STYLES.default;
+
+    // 移除 transition 和 textFill，只保留 SVGRect 相关属性
+    const { textFill, transition, ...rectStyle } = keyStyle;
+
     return (
       <motion.rect
         {...props}
-        {...keyStyle}
+        {...rectStyle}
         whileHover={KEY_STYLES.hover}
         whileTap={KEY_STYLES.active}
       />
     );
   };
 
-  // 渲染按键文字
-  const renderKeyText = (keyId, props) => {
+  const renderKeyText = (keyId: string, props: KeyTextProps) => {
     const keyStyle = isKeyHighlighted(keyId)
       ? KEY_STYLES.highlighted
       : KEY_STYLES.default;
@@ -85,6 +137,9 @@ export default function BaseKeyboard({
       />
     );
   };
+
+  // 类型断言
+  const layout = KEYBOARD_LAYOUT as KeyboardLayout;
 
   return (
     <motion.svg
@@ -137,13 +192,13 @@ export default function BaseKeyboard({
 
       {/* 按键组 */}
       <g>
-        {KEYBOARD_LAYOUT.rows[keyboardType].map((row, rowIndex) => (
+        {layout.rows[keyboardType].map((row, rowIndex) => (
           <g key={rowIndex}>
-            {row.keys.map((keyId, keyIndex) => {
+            {row.keys.map((keyId: string, keyIndex: number) => {
               const keySize = getKeySize(keyId);
               const x =
                 KEYBOARD_DIMENSIONS.case.padding.left +
-                keyIndex * (keySize.width + KEYBOARD_LAYOUT.spacing.horizontal);
+                keyIndex * (keySize.width + layout.spacing.horizontal);
               const y = row.y;
 
               return renderKeyGroup(
@@ -195,17 +250,4 @@ export default function BaseKeyboard({
       </defs>
     </motion.svg>
   );
-}
-
-BaseKeyboard.propTypes = {
-  activeKeys: PropTypes.arrayOf(PropTypes.string),
-  className: PropTypes.string,
-  keyMap: PropTypes.object,
-  keyboardType: PropTypes.oneOf(["windows", "mac"]),
-};
-
-BaseKeyboard.defaultProps = {
-  activeKeys: [],
-  keyMap: {},
-  keyboardType: "windows",
-};
+} 

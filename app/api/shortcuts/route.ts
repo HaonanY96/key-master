@@ -1,79 +1,104 @@
-import { NextResponse } from "next/server";
-import { shortcutGroups } from "@/lib/shortcuts/data/windows/system";
-import {
-  shortcutQuerySchema,
-  type ShortcutResponse,
-  type ErrorResponse,
-} from "@/lib/shortcuts/types/api";
-import { type ShortcutGroup } from "@/lib/shortcuts/types/common";
+import { NextResponse } from 'next/server';
+import { shortcuts } from '@/lib/shortcuts/data/windows/system';
+import { calculateSimilarity } from '@/lib/shortcuts/utils/search';
 
-/**
- * GET /api/shortcuts
- * Fetch shortcuts with optional filters
- */
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const params = {
-      platform: searchParams.get("platform"),
-      appType: searchParams.get("appType"),
-      category: searchParams.get("category"),
-      query: searchParams.get("query"),
-    };
-
-    // Validate query parameters
-    const validatedParams = shortcutQuerySchema.parse(params);
-
-    // Filter shortcuts based on parameters
-    let results = Object.values(shortcutGroups) as ShortcutGroup[];
-
-    if (validatedParams.platform) {
-      results = results.filter(group => 
-        group.metadata?.platform === validatedParams.platform
-      );
+    const platform = searchParams.get('platform');
+    const category = searchParams.get('category');
+    const software = searchParams.get('software');
+    const query = searchParams.get('query');
+    const page = parseInt(searchParams.get('page') || '1');
+    if (page < 1) {
+      return NextResponse.json({
+        success: false,
+        error: 'Page number must be greater than 0'
+      }, { status: 400 });
+    }
+    const limit = parseInt(searchParams.get('limit') || '20');
+    if (limit < 1 || limit > 100) {
+      return NextResponse.json({
+        success: false,
+        error: 'Limit must be between 1 and 100'
+      }, { status: 400 });
+    }
+    const sort = searchParams.get('sort');
+    if (sort && !['popularity', 'complexity', 'name'].includes(sort)) {
+      return NextResponse.json({
+        success: false,
+        error: 'Invalid sort parameter'
+      }, { status: 400 });
     }
 
-    if (validatedParams.appType) {
-      results = results.filter(group => 
-        group.metadata?.context === validatedParams.appType
-      );
+    let results = [...shortcuts];
+
+    // 按平台筛选
+    if (platform) {
+      results = results.filter(shortcut => shortcut.platform === platform);
     }
 
-    if (validatedParams.category) {
-      results = results.filter(group => 
-        group.category === validatedParams.category
-      );
+    // 按分类筛选
+    if (category) {
+      results = results.filter(shortcut => shortcut.category === category);
     }
 
-    if (validatedParams.query) {
-      const query = validatedParams.query.toLowerCase();
-      results = results.filter(group => 
-        group.shortcuts.some(shortcut => 
-          shortcut.description.toLowerCase().includes(query) ||
-          shortcut.usage.toLowerCase().includes(query)
-        )
-      );
+    // 按软件筛选
+    if (software) {
+      results = results.filter(shortcut => shortcut.software === software);
     }
 
-    const response: ShortcutResponse = {
-      groups: results,
-      total: results.length,
-      platform: validatedParams.platform,
-      appType: validatedParams.appType,
-    };
+    // 搜索
+    if (query) {
+      results = results.filter(shortcut => {
+        const nameMatch = calculateSimilarity(shortcut.name.toLowerCase(), query.toLowerCase()) > 0.7;
+        const descMatch = calculateSimilarity(shortcut.description.toLowerCase(), query.toLowerCase()) > 0.7;
+        return nameMatch || descMatch;
+      });
+    }
 
-    return NextResponse.json(response);
+    // 排序
+    if (sort) {
+      results.sort((a, b) => {
+        switch (sort) {
+          case 'popularity':
+            return (b.metadata?.popularity || 'low').localeCompare(a.metadata?.popularity || 'low');
+          case 'complexity':
+            return (a.metadata?.complexity || 'basic').localeCompare(b.metadata?.complexity || 'basic');
+          case 'name':
+            return a.name.localeCompare(b.name);
+          default:
+            return 0;
+        }
+      });
+    }
+
+    // 分页
+    const total = results.length;
+    const totalPages = Math.ceil(total / limit);
+    const start = (page - 1) * limit;
+    const end = start + limit;
+    results = results.slice(start, end);
+
+    return NextResponse.json({
+      success: true,
+      data: results,
+      metadata: {
+        total,
+        currentPage: page,
+        totalPages,
+        limit
+      }
+    });
+
   } catch (error) {
     console.error('API Error:', error);
-    const errorResponse: ErrorResponse = {
-      error: error instanceof Error ? error.message : "Internal Server Error",
-      code: error instanceof Error ? error.name : "UNKNOWN_ERROR",
-      details: error instanceof Error ? error : undefined,
-    };
-
     return NextResponse.json(
-      errorResponse,
-      { status: error instanceof Error ? 422 : 500 }
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Internal Server Error'
+      },
+      { status: 500 }
     );
   }
 } 

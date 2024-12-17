@@ -1,33 +1,35 @@
+import { Category, Shortcut } from './common';
 import { z } from "zod";
-import { ShortcutGroup } from "./common";
 
 /**
  * API response type
  */
-export interface ShortcutResponse {
-  groups: ShortcutGroup[];
-  total: number;
-  platform?: string | null;
-  appType?: string | null;
+export interface ApiResponse<T> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  metadata?: {
+    total: number;
+    currentPage?: number;
+    totalPages?: number;
+    limit?: number;
+  };
 }
 
-/**
- * API error response type
- */
-export interface ErrorResponse {
-  error: string;
-  code: string;
-  details?: unknown;
-}
+export interface ShortcutResponse extends ApiResponse<Shortcut[]> {}
+export interface CategoryResponse extends ApiResponse<Category[]> {}
 
 /**
  * API query parameters validation
  */
 export const shortcutQuerySchema = z.object({
   platform: z.string().nullable(),
-  appType: z.string().nullable(),
   category: z.string().nullable(),
+  software: z.string().nullable(),
   query: z.string().nullable(),
+  page: z.number().optional(),
+  limit: z.number().optional(),
+  sort: z.enum(['popularity', 'complexity', 'name']).optional()
 });
 
 export type ShortcutQueryParams = z.infer<typeof shortcutQuerySchema>; 

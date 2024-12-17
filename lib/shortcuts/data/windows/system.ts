@@ -1,15 +1,16 @@
 import { KEY_IDENTIFIERS } from "@/lib/shortcuts/constants/keyboard";
 import { 
-  ShortcutCategory,
+  FunctionType,
   ShortcutGroup,
-  ShortcutsCollection 
+  ShortcutsCollection,
+  Shortcut
 } from "@/lib/shortcuts/types/common";
 
 export const shortcutGroups: Record<string, ShortcutGroup> = {
   "windows-system": {
     id: "windows-system",
     name: "Windows System",
-    category: ShortcutCategory.WINDOWS_KEY,
+    category: FunctionType.SYSTEM,
     description: "Essential Windows system shortcuts",
     order: 1,
     metadata: {
@@ -19,10 +20,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "task-manager",
+        name: "Task Manager",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.ESCAPE],
-        description: "Open Task Manager",
-        tooltip: "View and manage system processes and performance",
-        usage: "Use to monitor system performance and manage tasks",
+        description: "Open Windows Task Manager to monitor system performance, manage running applications and view detailed system processes information",
+        usage: "Use when system is slow or applications are not responding",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -31,10 +32,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "open-start",
+        name: "Start Menu",
         keys: [KEY_IDENTIFIERS.META_LEFT],
-        description: "Open Start Menu",
-        tooltip: "Open or close the Start menu",
-        usage: "Press Windows key to access Start menu",
+        description: "Open or close the Windows Start menu, providing access to installed applications, system settings, and search functionality",
+        usage: "Access programs, files and system settings quickly",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -43,22 +44,23 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "action-center",
+        name: "Action Center",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.A],
-        description: "Open Action Center",
-        tooltip: "Open Windows Action center",
-        usage: "Quick access to notifications and quick settings",
+        description: "Open Windows Action Center to access notifications, quick settings, and system status updates in one place",
+        usage: "When you need to check notifications or change common settings",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "system",
+          relatedShortcuts: ["settings", "quick-link"],
         },
       },
       {
         id: "taskbar-focus",
+        name: "Taskbar Focus",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.B],
-        description: "Focus Taskbar",
-        tooltip: "Set focus to notification area in Taskbar",
-        usage: "Quick access to system tray icons",
+        description: "Set keyboard focus to the Windows taskbar notification area for quick access to system tray icons",
+        usage: "When you need to access system tray icons using keyboard",
         metadata: {
           complexity: "basic",
           popularity: "low",
@@ -67,34 +69,36 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "show-desktop",
+        name: "Show Desktop",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.D],
-        description: "Show Desktop",
-        tooltip: "Display and hide the desktop",
-        usage: "Toggle desktop view",
+        description: "Show or hide all open windows to quickly access the desktop and its contents",
+        usage: "When you need to access desktop icons or widgets",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "desktop",
+          relatedShortcuts: ["minimize-all"],
         },
       },
       {
         id: "settings",
+        name: "Windows Settings",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.I],
-        description: "Settings",
-        tooltip: "Open Windows Settings",
-        usage: "Access system settings",
+        description: "Open Windows Settings app to configure system options, personalization, and other Windows features",
+        usage: "When you need to change any Windows settings or configurations",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "system",
+          relatedShortcuts: ["action-center", "quick-link"],
         },
       },
       {
         id: "lock-computer",
+        name: "Lock Computer",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.L],
-        description: "Lock Computer",
-        tooltip: "Lock the computer screen",
-        usage: "Quickly secure your computer when stepping away",
+        description: "Lock the computer screen immediately, requiring authentication to regain access",
+        usage: "When leaving your computer unattended briefly",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -103,38 +107,41 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "minimize-all",
+        name: "Minimize All Windows",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.M],
-        description: "Minimize All",
-        tooltip: "Minimize all windows",
-        usage: "Quick desktop access",
+        description: "Minimize all open windows at once to quickly clear the screen",
+        usage: "When you need to clear your workspace quickly",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "window-management",
+          relatedShortcuts: ["show-desktop"],
         },
       },
       {
         id: "run-dialog",
+        name: "Run Dialog",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.R],
-        description: "Run",
-        tooltip: "Open Run command",
-        usage: "Execute commands quickly",
+        description: "Open the Run dialog to quickly execute commands, programs, or open specific locations",
+        usage: "When you need to launch programs or commands directly",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
           context: "system",
+          relatedShortcuts: ["quick-link", "open-search"],
         },
       },
       {
         id: "quick-link",
+        name: "Quick Link Menu",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.X],
-        description: "Quick Link Menu",
-        tooltip: "Open Quick Link menu",
-        usage: "Access system tools quickly",
+        description: "Open the Quick Link menu (Power User menu) for fast access to system management tools and settings",
+        usage: "When you need quick access to advanced system features",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "system",
+          relatedShortcuts: ["settings", "run-dialog"],
         },
       },
     ],
@@ -143,7 +150,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "input-methods": {
     id: "input-methods",
     name: "Input Methods",
-    category: ShortcutCategory.INPUT,
+    category: FunctionType.INPUT,
     description: "Input method and keyboard layout shortcuts",
     order: 2,
     metadata: {
@@ -153,26 +160,28 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "keyboard-layout",
+        name: "Keyboard Layout Switch",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT],
-        description: "Switch Keyboard Layout",
-        tooltip: "Change between installed keyboard layouts",
-        usage: "Use when you need to switch between different keyboard layouts",
+        description: "Switch between installed keyboard layouts to type in different languages or input styles",
+        usage: "When you need to type in a different language",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "system-wide",
+          relatedShortcuts: ["toggle-ime"],
         },
       },
       {
         id: "toggle-ime",
+        name: "Chinese IME Toggle",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.SPACE],
-        description: "Toggle Chinese IME",
-        tooltip: "Enable or disable Chinese Input Method Editor",
-        usage: "Use to switch between input methods",
+        description: "Toggle between Chinese Input Method Editor and standard keyboard input for Chinese text entry",
+        usage: "When switching between Chinese and English input",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "text-input",
+          relatedShortcuts: ["keyboard-layout"],
         },
       },
     ],
@@ -181,7 +190,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "windows-quick-access": {
     id: "windows-quick-access",
     name: "Windows Quick Access",
-    category: ShortcutCategory.QUICK_ACCESS,
+    category: FunctionType.UI,
     description: "Quick access shortcuts for Windows features",
     order: 3,
     metadata: {
@@ -191,10 +200,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "quick-assist",
+        name: "Quick Assist",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.Q],
-        description: "Open Quick Assist",
-        tooltip: "Open Quick Assist for remote help",
-        usage: "Get remote assistance",
+        description: "Launch Windows Quick Assist tool to give or receive remote assistance with screen sharing and remote control capabilities",
+        usage: "When you need remote help or want to help someone else",
         metadata: {
           complexity: "intermediate",
           popularity: "low",
@@ -203,10 +212,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "game-bar",
+        name: "Game Bar",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.G],
-        description: "Open Game Bar",
-        tooltip: "Launch Game bar app",
-        usage: "Access gaming features",
+        description: "Open Xbox Game Bar to access gaming features, record gameplay, monitor performance, and control audio settings",
+        usage: "When gaming or recording your screen",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -215,10 +224,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "dictation",
+        name: "Dictation",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.H],
-        description: "Open Dictation",
-        tooltip: "Start dictation feature",
-        usage: "Voice input",
+        description: "Start Windows voice dictation feature to convert speech to text in any text input field",
+        usage: "When you prefer speaking over typing",
         metadata: {
           complexity: "basic",
           popularity: "low",
@@ -227,10 +236,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "connect-devices",
+        name: "Connect Devices",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.K],
-        description: "Connect Devices",
-        tooltip: "Open Connect settings",
-        usage: "Connect to wireless displays and audio devices",
+        description: "Open the Connect panel to discover and connect to wireless displays, audio devices, and other peripherals",
+        usage: "When connecting to external displays or audio devices",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -239,10 +248,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "project",
+        name: "Project Display",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.P],
-        description: "Project",
-        tooltip: "Open Project settings",
-        usage: "Configure display projection",
+        description: "Access display projection settings to manage multiple displays and projection modes",
+        usage: "When connecting to external displays or preparing for presentations",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -255,7 +264,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "windows-search": {
     id: "windows-search",
     name: "Windows Search",
-    category: ShortcutCategory.SEARCH,
+    category: FunctionType.SEARCH,
     description: "Search-related shortcuts",
     order: 4,
     metadata: {
@@ -265,22 +274,23 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "open-search",
+        name: "Windows Search",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.S],
-        description: "Open Search",
-        tooltip: "Open Windows Search",
-        usage: "Search files and settings",
+        description: "Open Windows Search interface to find files, settings, and applications across your system",
+        usage: "When you need to quickly find anything on your computer",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "search",
+          relatedShortcuts: ["file-search", "domain-search"],
         },
       },
       {
         id: "domain-search",
+        name: "Domain Search",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.F],
-        description: "Domain Search",
-        tooltip: "Search for device on domain network",
-        usage: "Network device search",
+        description: "Search for computers, printers and other devices on your corporate network domain",
+        usage: "When looking for network resources in a corporate environment",
         metadata: {
           complexity: "advanced",
           popularity: "low",
@@ -289,14 +299,15 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "file-search",
+        name: "File Search",
         keys: [KEY_IDENTIFIERS.F3],
-        description: "File Search",
-        tooltip: "Search for file or folder",
-        usage: "Find files in File Explorer",
+        description: "Activate file search in File Explorer to quickly locate files and folders in the current directory",
+        usage: "When browsing folders and need to find specific files",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "file-search",
+          relatedShortcuts: ["open-search", "domain-search"],
         },
       },
     ],
@@ -305,7 +316,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "windows-clipboard": {
     id: "windows-clipboard",
     name: "Windows Clipboard",
-    category: ShortcutCategory.CLIPBOARD,
+    category: FunctionType.CLIPBOARD,
     description: "Clipboard management shortcuts",
     order: 5,
     metadata: {
@@ -315,10 +326,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "clipboard-history",
+        name: "Clipboard History",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.V],
-        description: "Clipboard History",
-        tooltip: "Open Clipboard bin",
-        usage: "Access clipboard history",
+        description: "Access Windows clipboard history to view and reuse previously copied items, including text, images and formatted content",
+        usage: "When you need to paste something you copied earlier",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -331,7 +342,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "window-management": {
     id: "window-management",
     name: "Window Management",
-    category: ShortcutCategory.WINDOW,
+    category: FunctionType.WINDOW,
     description: "Window manipulation and navigation shortcuts",
     order: 6,
     metadata: {
@@ -341,10 +352,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "close-window",
+        name: "Close Window",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.F4],
-        description: "Close Window",
-        tooltip: "Close active window or show shutdown dialog if no window is active",
-        usage: "Close current window or shutdown system",
+        description: "Close the currently active window or application. If no window is active, shows the system shutdown dialog",
+        usage: "When you want to close the current program or shut down Windows",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -353,10 +364,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "window-menu",
+        name: "Window Menu",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.SPACE],
-        description: "Window Menu",
-        tooltip: "Open context menu for the active window",
-        usage: "Access window-specific commands",
+        description: "Open the control menu for the active window, providing access to minimize, maximize, restore and close options",
+        usage: "When you need to access window controls without using the mouse",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -365,10 +376,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "minimize-window",
+        name: "Minimize Window",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.ARROW_DOWN],
-        description: "Minimize Window",
-        tooltip: "Minimize app windows",
-        usage: "Minimize current window",
+        description: "Minimize the current window to the taskbar while keeping it running in the background",
+        usage: "When you want to temporarily hide the current window",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -377,10 +388,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "maximize-window",
+        name: "Maximize Window",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.ARROW_UP],
-        description: "Maximize Window",
-        tooltip: "Maximize app windows",
-        usage: "Maximize current window",
+        description: "Expand the current window to fill the entire screen for maximum workspace",
+        usage: "When you need to focus on a single application",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -389,34 +400,36 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "snap-left",
+        name: "Snap Left",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.ARROW_LEFT],
-        description: "Snap Left",
-        tooltip: "Snap app or window left",
-        usage: "Arrange windows side by side",
+        description: "Automatically resize and position the current window to occupy the left half of the screen, enabling efficient side-by-side window arrangement",
+        usage: "When working with two windows side by side",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "window-management",
+          relatedShortcuts: ["snap-right", "maximize-window", "minimize-window"],
         },
       },
       {
         id: "snap-right",
+        name: "Snap Right",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.ARROW_RIGHT],
-        description: "Snap Right",
-        tooltip: "Snap app or window right",
-        usage: "Arrange windows side by side",
+        description: "Automatically resize and position the current window to occupy the right half of the screen, enabling efficient side-by-side window arrangement",
+        usage: "When working with two windows side by side",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "window-management",
+          relatedShortcuts: ["snap-left", "maximize-window", "minimize-window"],
         },
       },
       {
         id: "move-window-left",
+        name: "Move Window Left",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.ARROW_LEFT],
-        description: "Move Window Left",
-        tooltip: "Move active window to monitor on the left",
-        usage: "Multi-monitor window management",
+        description: "Move the active window to the monitor on the left in a multi-monitor setup",
+        usage: "When working with multiple displays and need to reorganize windows",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
@@ -425,10 +438,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "move-window-right",
+        name: "Move Window Right",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.ARROW_RIGHT],
-        description: "Move Window Right",
-        tooltip: "Move active window to monitor on the right",
-        usage: "Multi-monitor window management",
+        description: "Move the active window to the monitor on the right in a multi-monitor setup",
+        usage: "When working with multiple displays and need to reorganize windows",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
@@ -437,10 +450,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "restore-window",
+        name: "Restore Window",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.ARROW_DOWN],
-        description: "Restore Window",
-        tooltip: "Restore window if snapped or maximized",
-        usage: "Window size management",
+        description: "Return a maximized or snapped window to its previous size and position",
+        usage: "When you want to un-maximize or un-snap a window",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -449,10 +462,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "stretch-window",
+        name: "Stretch Window",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.ARROW_UP],
-        description: "Stretch Window",
-        tooltip: "Stretch desktop window to top and bottom of screen",
-        usage: "Window size management",
+        description: "Vertically expand the current window to fill the screen height while maintaining its width",
+        usage: "When you need more vertical space while keeping the window width",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -465,7 +478,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "text-editing": {
     id: "text-editing",
     name: "Text Editing",
-    category: ShortcutCategory.TEXT_EDITING,
+    category: FunctionType.TEXT,
     description: "Text editing and formatting shortcuts",
     order: 7,
     metadata: {
@@ -475,10 +488,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "select-all",
+        name: "Select All",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.A],
-        description: "Select All",
-        tooltip: "Select all text",
-        usage: "Select entire document content",
+        description: "Select all content in the current document, text field, or window",
+        usage: "When you need to work with the entire content at once",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -487,10 +500,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "bold",
+        name: "Bold",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.B],
-        description: "Bold",
-        tooltip: "Make selected text bold",
-        usage: "Text formatting",
+        description: "Apply or remove bold formatting to selected text in supported applications",
+        usage: "When you want to emphasize text in documents",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -499,22 +512,23 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "copy",
+        name: "Copy",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.C],
-        description: "Copy",
-        tooltip: "Copy selected text",
-        usage: "Copy text to clipboard",
+        description: "Copy selected content to the clipboard while keeping the original intact",
+        usage: "When you want to duplicate content elsewhere",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "clipboard",
+          relatedShortcuts: ["paste", "cut", "clipboard-history"],
         },
       },
       {
         id: "find",
+        name: "Find",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.F],
-        description: "Find",
-        tooltip: "Find text in document",
-        usage: "Search within document",
+        description: "Open the search interface to locate specific text within the current document or page",
+        usage: "When you need to find specific words or phrases",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -523,10 +537,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "find-replace",
+        name: "Find and Replace",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.H],
-        description: "Find and Replace",
-        tooltip: "Find and replace text",
-        usage: "Search and replace text",
+        description: "Open the find and replace dialog to search and substitute text throughout the document",
+        usage: "When you need to replace multiple occurrences of text",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
@@ -535,10 +549,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "italic",
+        name: "Italic",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.I],
-        description: "Italic",
-        tooltip: "Make selected text italic",
-        usage: "Text formatting",
+        description: "Apply or remove italic formatting to selected text in supported applications",
+        usage: "When you want to style text for emphasis or citations",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -547,10 +561,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "underline",
+        name: "Underline",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.U],
-        description: "Underline",
-        tooltip: "Underline selected text",
-        usage: "Text formatting",
+        description: "Apply or remove underline formatting to selected text in supported applications",
+        usage: "When you want to highlight important text or create links",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -559,34 +573,36 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "paste",
+        name: "Paste",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.V],
-        description: "Paste",
-        tooltip: "Paste text from clipboard",
-        usage: "Insert copied text",
+        description: "Insert content from the clipboard at the current cursor position",
+        usage: "When you want to insert previously copied content",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "clipboard",
+          relatedShortcuts: ["copy", "cut", "clipboard-history"],
         },
       },
       {
         id: "cut",
+        name: "Cut",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.X],
-        description: "Cut",
-        tooltip: "Cut selected text",
-        usage: "Move text to clipboard",
+        description: "Remove selected content and copy it to the clipboard for moving elsewhere",
+        usage: "When you want to move content to a different location",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "clipboard",
+          relatedShortcuts: ["copy", "paste", "clipboard-history"],
         },
       },
       {
         id: "redo",
+        name: "Redo",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.Y],
-        description: "Redo",
-        tooltip: "Redo last undone action",
-        usage: "Restore undone changes",
+        description: "Reapply the last action that was undone, restoring the previous change",
+        usage: "When you want to restore a change you just undid",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -595,10 +611,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "undo",
+        name: "Undo",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.Z],
-        description: "Undo",
-        tooltip: "Undo last action",
-        usage: "Reverse recent changes",
+        description: "Reverse the last action performed, returning to the previous state",
+        usage: "When you make a mistake and want to go back",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -607,10 +623,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "delete-word-left",
+        name: "Delete Word Left",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.BACKSPACE],
-        description: "Delete Word Left",
-        tooltip: "Delete words to the left",
-        usage: "Quick word deletion",
+        description: "Delete all characters from the cursor position to the start of the current word",
+        usage: "When you want to quickly delete entire words while typing",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
@@ -619,14 +635,15 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "delete-word-right",
+        name: "Delete Word Right",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.DELETE],
-        description: "Delete Word Right",
-        tooltip: "Delete words to the right",
-        usage: "Quick word deletion",
+        description: "Delete all characters from the cursor position to the end of the current word",
+        usage: "When you want to quickly delete entire words while typing",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
           context: "text-deletion",
+          relatedShortcuts: ["delete-word-left"],
         },
       }
     ],
@@ -635,7 +652,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "file-explorer": {
     id: "file-explorer",
     name: "File Explorer",
-    category: ShortcutCategory.FILE_EXPLORER,
+    category: FunctionType.FILE,
     description: "File Explorer navigation and operation shortcuts",
     order: 8,
     metadata: {
@@ -645,118 +662,127 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "open-explorer",
+        name: "Open File Explorer",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.E],
-        description: "Open File Explorer",
-        tooltip: "Launch File Explorer",
-        usage: "Quick access to file system",
+        description: "Launch Windows File Explorer to browse and manage files and folders on your computer",
+        usage: "When you need to access your files and folders",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "file-management",
+          relatedShortcuts: ["new-window"],
         },
       },
       {
         id: "select-address",
+        name: "Select Address Bar",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.D],
-        description: "Select Address Bar",
-        tooltip: "Focus on the address bar",
-        usage: "Quick access to address bar for navigation",
+        description: "Move focus to the address bar to directly enter or edit the current folder path",
+        usage: "When you want to quickly navigate to a specific folder",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "navigation",
+          relatedShortcuts: ["parent-folder", "search-focus"],
         },
       },
       {
         id: "show-properties",
+        name: "Show Properties",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.ENTER],
-        description: "Show Properties",
-        tooltip: "Open properties for selected item",
-        usage: "View detailed information about selected item",
+        description: "Display the properties window for the selected item, showing details like size, date modified, and attributes",
+        usage: "When you need to check file details or change file attributes",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "file-management",
+          relatedShortcuts: ["preview-panel"],
         },
       },
       {
         id: "preview-panel",
+        name: "Preview Panel",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.P],
-        description: "Preview Panel",
-        tooltip: "Display preview panel",
-        usage: "Quick preview of selected files",
+        description: "Toggle the preview panel to see the contents of selected files without opening them",
+        usage: "When you want to quickly preview files before opening",
         metadata: {
           complexity: "basic",
           popularity: "low",
           context: "view",
+          relatedShortcuts: ["show-properties"],
         },
       },
       {
         id: "parent-folder",
+        name: "Go to Parent Folder",
         keys: [KEY_IDENTIFIERS.ALT_LEFT, KEY_IDENTIFIERS.ARROW_UP],
-        description: "Parent Folder",
-        tooltip: "Move up one level in folder hierarchy",
-        usage: "Navigate to parent folder",
+        description: "Navigate up one level in the folder hierarchy to the containing folder",
+        usage: "When you want to go back to the previous folder level",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "navigation",
+          relatedShortcuts: ["select-address"],
         },
       },
       {
         id: "search-focus",
+        name: "Focus Search Box",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.E],
-        description: "Focus Search",
-        tooltip: "Select search box",
-        usage: "Quick access to search functionality",
+        description: "Move focus to the search box to quickly find files and folders in the current location",
+        usage: "When you need to search within the current folder",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "search",
+          relatedShortcuts: ["select-address", "file-search"],
         },
       },
       {
         id: "new-window",
+        name: "New Window",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.N],
-        description: "New Window",
-        tooltip: "Open new File Explorer window",
-        usage: "Open another File Explorer instance",
+        description: "Open a new File Explorer window while keeping the current one open",
+        usage: "When you need to work with multiple folders simultaneously",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "window",
+          relatedShortcuts: ["open-explorer"],
         },
       },
       {
         id: "expand-all",
+        name: "Expand All Folders",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.E],
-        description: "Expand All",
-        tooltip: "Expand all folders in navigation pane",
-        usage: "View complete folder structure",
+        description: "Expand all folders in the navigation pane to show the complete folder structure",
+        usage: "When you need to see the full folder hierarchy",
         metadata: {
           complexity: "intermediate",
           popularity: "low",
           context: "navigation",
+          relatedShortcuts: ["parent-folder"],
         },
       },
       {
         id: "new-folder",
+        name: "New Folder",
         keys: [KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.SHIFT_LEFT, KEY_IDENTIFIERS.N],
-        description: "New Folder",
-        tooltip: "Create new folder",
-        usage: "Create a new folder in current location",
+        description: "Create a new empty folder in the current location and enter rename mode",
+        usage: "When you need to create a new folder quickly",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "file-management",
+          relatedShortcuts: ["rename"],
         },
       },
       {
         id: "rename",
+        name: "Rename Item",
         keys: [KEY_IDENTIFIERS.F2],
-        description: "Rename",
-        tooltip: "Rename selected item",
-        usage: "Rename file or folder",
+        description: "Enter edit mode to rename the selected file, folder, or other items",
+        usage: "When you need to rename files or folders quickly",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -765,10 +791,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "refresh",
+        name: "Refresh View",
         keys: [KEY_IDENTIFIERS.F5],
-        description: "Refresh",
-        tooltip: "Refresh current view",
-        usage: "Update folder contents",
+        description: "Update the current view to show the latest content and changes",
+        usage: "When you want to see recent changes in a folder or webpage",
         metadata: {
           complexity: "basic",
           popularity: "high",
@@ -781,7 +807,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "accessibility": {
     id: "accessibility",
     name: "Accessibility",
-    category: ShortcutCategory.ACCESSIBILITY,
+    category: FunctionType.ACCESSIBILITY,
     description: "Accessibility feature shortcuts",
     order: 9,
     metadata: {
@@ -791,10 +817,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "narrator",
+        name: "Narrator",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.ENTER],
-        description: "Narrator",
-        tooltip: "Start or stop Narrator",
-        usage: "Screen reading assistance",
+        description: "Start or stop Windows Narrator, a screen reader that reads text and interface elements aloud",
+        usage: "When you need audio assistance for screen reading",
         metadata: {
           complexity: "basic",
           popularity: "low",
@@ -803,34 +829,36 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "magnifier-zoom-in",
+        name: "Magnifier Zoom In",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.EQUAL],
-        description: "Zoom In",
-        tooltip: "Increase magnification",
-        usage: "Zoom in using magnifier",
+        description: "Increase the magnification level of Windows Magnifier to make content appear larger",
+        usage: "When you need to see screen content more clearly",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "magnifier",
+          relatedShortcuts: ["magnifier-zoom-out", "magnifier-exit"],
         },
       },
       {
         id: "magnifier-zoom-out",
+        name: "Magnifier Zoom Out",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.MINUS],
-        description: "Zoom Out",
-        tooltip: "Decrease magnification",
-        usage: "Zoom out using magnifier",
+        description: "Decrease the magnification level of Windows Magnifier to show more content",
+        usage: "When you want to reduce the zoom level while using Magnifier",
         metadata: {
           complexity: "basic",
           popularity: "medium",
           context: "magnifier",
+          relatedShortcuts: ["magnifier-zoom-in", "magnifier-exit"],
         },
       },
       {
         id: "magnifier-exit",
+        name: "Exit Magnifier",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.ESCAPE],
-        description: "Exit Magnifier",
-        tooltip: "Exit magnifier",
-        usage: "Close magnifier tool",
+        description: "Close the Windows Magnifier tool and return to normal screen view",
+        usage: "When you want to stop using the screen magnifier",
         metadata: {
           complexity: "basic",
           popularity: "medium",
@@ -851,10 +879,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       // },
       {
         id: "filter-keys",
+        name: "Filter Keys",
         keys: [KEY_IDENTIFIERS.SHIFT_RIGHT],
-        description: "Filter Keys",
-        tooltip: "Toggle Filter Keys",
-        usage: "Ignore brief or repeated keystrokes",
+        description: "Toggle Filter Keys feature to ignore or slow down repeated keystrokes for more accurate typing",
+        usage: "When you have difficulty with accidental repeated keystrokes",
         metadata: {
           complexity: "basic",
           popularity: "low",
@@ -864,10 +892,10 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "sticky-keys",
+        name: "Sticky Keys",
         keys: [KEY_IDENTIFIERS.SHIFT_LEFT],
-        description: "Sticky Keys",
-        tooltip: "Toggle Sticky Keys",
-        usage: "Press modifier keys one at a time",
+        description: "Enable Sticky Keys to press modifier keys (Ctrl, Alt, Shift) one at a time instead of simultaneously",
+        usage: "When you have difficulty pressing multiple keys at once",
         metadata: {
           complexity: "basic",
           popularity: "low",
@@ -894,7 +922,7 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
   "virtual-desktop": {
     id: "virtual-desktop",
     name: "Virtual Desktop",
-    category: ShortcutCategory.VIRTUAL_DESKTOP,
+    category: FunctionType.VIRTUAL_DESKTOP,
     description: "Virtual desktop management shortcuts",
     order: 10,
     metadata: {
@@ -904,23 +932,23 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
     shortcuts: [
       {
         id: "task-view",
+        name: "Task View",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.TAB],
-        description: "Open Task View",
-        tooltip: "View all open windows and virtual desktops",
-        usage: "Get overview of all windows and virtual desktops",
+        description: "Display an overview of all open windows and virtual desktops for easy navigation and management",
+        usage: "When you need to find a specific window or switch between virtual desktops",
         metadata: {
           complexity: "basic",
           popularity: "high",
           context: "virtual-desktop",
-          relatedShortcuts: ["new-desktop", "next-desktop"],
+          relatedShortcuts: ["new-virtual-desktop", "next-desktop", "previous-desktop"],
         },
       },
       {
-        id: "new-desktop",
+        id: "new-virtual-desktop",
+        name: "New Virtual Desktop",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.D],
-        description: "Add Virtual Desktop",
-        tooltip: "Create a new virtual desktop",
-        usage: "Create a new workspace",
+        description: "Create a new virtual desktop to organize different sets of applications and windows in separate workspaces",
+        usage: "When you want to separate work apps from personal apps",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
@@ -930,46 +958,60 @@ export const shortcutGroups: Record<string, ShortcutGroup> = {
       },
       {
         id: "next-desktop",
+        name: "Next Desktop",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.ARROW_RIGHT],
-        description: "Next Virtual Desktop",
-        tooltip: "Switch to the next virtual desktop",
-        usage: "Move to the desktop on the right",
+        description: "Switch to the next virtual desktop in your workspace sequence",
+        usage: "When moving between different workspace contexts",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
           context: "virtual-desktop",
-          relatedShortcuts: ["previous-desktop"],
+          relatedShortcuts: ["previous-desktop", "task-view", "new-virtual-desktop"],
         },
       },
       {
         id: "previous-desktop",
+        name: "Previous Desktop",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.ARROW_LEFT],
-        description: "Previous Virtual Desktop",
-        tooltip: "Switch to the previous virtual desktop",
-        usage: "Move to the desktop on the left",
+        description: "Switch to the previous virtual desktop in your workspace sequence",
+        usage: "When returning to the previous workspace context",
         metadata: {
           complexity: "intermediate",
           popularity: "medium",
           context: "virtual-desktop",
-          relatedShortcuts: ["next-desktop"],
+          relatedShortcuts: ["next-desktop", "task-view", "new-virtual-desktop"],
         },
       },
       {
         id: "close-desktop",
+        name: "Close Desktop",
         keys: [KEY_IDENTIFIERS.META_LEFT, KEY_IDENTIFIERS.CONTROL_LEFT, KEY_IDENTIFIERS.F4],
-        description: "Close Virtual Desktop",
-        tooltip: "Close the current virtual desktop",
-        usage: "Remove the current virtual desktop",
+        description: "Remove the current virtual desktop and redistribute its windows to other desktops",
+        usage: "When you want to consolidate your workspaces",
         metadata: {
           complexity: "intermediate",
           popularity: "low",
           context: "virtual-desktop",
-          relatedShortcuts: ["new-desktop"],
+          relatedShortcuts: ["new-virtual-desktop", "task-view"],
         },
       }
     ],
   },
 };
+
+// 从所有组中提取快捷键
+export const shortcuts = Object.values(shortcutGroups).reduce<Shortcut[]>(
+  (allShortcuts, group) => {
+    const groupShortcuts = group.shortcuts.map(shortcut => ({
+      ...shortcut,
+      platform: 'windows',
+      category: group.category,
+      software: group.metadata?.context === 'software' ? group.id : undefined
+    }));
+    return [...allShortcuts, ...groupShortcuts];
+  },
+  []
+);
 
 export const windowsSystemShortcuts: ShortcutsCollection = {
   metadata: {
