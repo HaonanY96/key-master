@@ -14,6 +14,7 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "axios": "^1.7.9",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "encoding": "^0.1.13",
@@ -41,5 +42,13 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "vitest": "^2.1.8"
-  }
+  },
+  "description": "A keyboard visualization and interaction tool.",
+  "main": "api-test.js",
+  "directories": {
+    "lib": "lib"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
 }

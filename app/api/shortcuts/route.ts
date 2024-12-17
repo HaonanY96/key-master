@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { shortcutsByPlatform, shortcuts } from '@/lib/shortcuts/data/shortcuts';
-import { FunctionType } from '@/lib/shortcuts/types/common';
+import { FunctionType, Shortcut } from '@/lib/shortcuts/types/common';
 
 export const dynamic = 'force-dynamic';
 
@@ -61,6 +61,44 @@ export async function GET(request: Request) {
         categories: Object.keys(groups)
       }
     });
+
+  } catch (error) {
+    console.error('API Error:', error);
+    return NextResponse.json(
+      { 
+        success: false, 
+        error: error instanceof Error ? error.message : 'Internal Server Error'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// 添加 POST 方法来处理创建新快捷键
+export async function POST(request: Request) {
+  try {
+    const data = await request.json();
+    
+    // 创建新的快捷键对象
+    const newShortcut: Shortcut = {
+      id: (shortcuts.length + 1).toString(),
+      name: data.name,
+      keys: Array.isArray(data.keys) ? data.keys : [data.key],
+      description: data.description,
+      category: data.category || 'Custom',
+      metadata: {
+        complexity: "basic",
+        context: "general"
+      }
+    };
+
+    // 将新快捷键添加到现有数组
+    shortcuts.push(newShortcut);
+
+    return NextResponse.json({
+      success: true,
+      data: newShortcut
+    }, { status: 201 });
 
   } catch (error) {
     console.error('API Error:', error);
