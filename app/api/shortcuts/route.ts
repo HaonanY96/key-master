@@ -1,11 +1,13 @@
 import { NextResponse } from 'next/server';
-import { shortcuts } from '@/lib/shortcuts/data/windows/system';
+import { shortcutsByPlatform, shortcuts } from '@/lib/shortcuts/data/shortcuts';
 import { calculateSimilarity } from '@/lib/shortcuts/utils/search';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const platform = searchParams.get('platform');
+    const platform = searchParams.get('platform') || 'windows';
     const category = searchParams.get('category');
     const software = searchParams.get('software');
     const query = searchParams.get('query');
@@ -31,12 +33,9 @@ export async function GET(request: Request) {
       }, { status: 400 });
     }
 
-    let results = [...shortcuts];
-
-    // 按平台筛选
-    if (platform) {
-      results = results.filter(shortcut => shortcut.platform === platform);
-    }
+    let results = platform === 'windows' 
+      ? [...shortcutsByPlatform.windows.system] 
+      : [...shortcuts];
 
     // 按分类筛选
     if (category) {
