@@ -1,4 +1,84 @@
-import { KEY_IDENTIFIERS } from "./keyboard-constants-identifiers.json" assert { type: "json" };
+// 直接在文件中定义 KEY_IDENTIFIERS
+export const KEY_IDENTIFIERS = {
+  ESCAPE: "Escape",
+  F1: "F1",
+  F2: "F2",
+  F3: "F3",
+  F4: "F4",
+  F5: "F5",
+  F6: "F6",
+  F7: "F7",
+  F8: "F8",
+  F9: "F9",
+  F10: "F10",
+  F11: "F11",
+  F12: "F12",
+  BACKQUOTE: "`",
+  DIGIT_1: "1",
+  DIGIT_2: "2",
+  DIGIT_3: "3",
+  DIGIT_4: "4",
+  DIGIT_5: "5",
+  DIGIT_6: "6",
+  DIGIT_7: "7",
+  DIGIT_8: "8",
+  DIGIT_9: "9",
+  DIGIT_0: "0",
+  MINUS: "-",
+  EQUAL: "=",
+  BACKSPACE: "Backspace",
+  TAB: "Tab",
+  CAPS_LOCK: "CapsLock",
+  SHIFT_LEFT: "ShiftLeft",
+  CONTROL_LEFT: "ControlLeft",
+  META_LEFT: "MetaLeft",
+  ALT_LEFT: "AltLeft",
+  SPACE: "Space",
+  ALT_RIGHT: "AltRight",
+  META_RIGHT: "MetaRight",
+  CONTROL_RIGHT: "ControlRight",
+  ARROW_LEFT: "ArrowLeft",
+  ARROW_UP: "ArrowUp",
+  ARROW_DOWN: "ArrowDown",
+  ARROW_RIGHT: "ArrowRight",
+  A: "A",
+  B: "B",
+  C: "C",
+  D: "D",
+  E: "E",
+  F: "F",
+  G: "G",
+  H: "H",
+  I: "I",
+  J: "J",
+  K: "K",
+  L: "L",
+  M: "M",
+  N: "N",
+  O: "O",
+  P: "P",
+  Q: "Q",
+  R: "R",
+  S: "S",
+  T: "T",
+  U: "U",
+  V: "V",
+  W: "W",
+  X: "X",
+  Y: "Y",
+  Z: "Z",
+  BRACKET_LEFT: "[",
+  BRACKET_RIGHT: "]",
+  BACKSLASH: "\\",
+  SEMICOLON: ";",
+  QUOTE: "'",
+  COMMA: ",",
+  PERIOD: ".",
+  SLASH: "/",
+  ENTER: "Enter",
+  DELETE: "Delete",
+  SHIFT_RIGHT: "ShiftRight"
+};
 
 // 1. 键盘尺寸常量
 export const KEYBOARD_DIMENSIONS = {
@@ -572,4 +652,17 @@ export const KEY_ID_MAP = {
   mac: {
     // ... mac 键盘映射保持不变 ...
   },
+};
+
+// 添加动画相关常量
+export const ANIMATION_CONSTANTS = {
+  duration: {
+    keyPress: 0.3,
+    sequence: 0.5,
+    reset: 0.2
+  },
+  colors: {
+    highlight: "#FFED4A",
+    active: "#E5B800"
+  }
 };

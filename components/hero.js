@@ -63,55 +63,31 @@ export default function Hero() {
   };
 
   return (
-    <section className="py-20 px-4 sm:px-6 lg:px-8 overflow-hidden">
-      <motion.div
-        className="max-w-7xl mx-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
+    <div className="relative bg-page-white">
+      <div className="container mx-auto px-4 py-16 sm:py-24">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <motion.h1
-              variants={itemVariants}
-              className="text-4xl font-extrabold text-gray-900 sm:text-5xl md:text-6xl"
-            >
+            <h1 className="text-4xl font-extrabold text-text-primary sm:text-5xl md:text-6xl">
               Master Your Keyboard
-            </motion.h1>
-            <motion.p
-              variants={itemVariants}
-              className="mt-3 text-base text-gray-500 sm:mt-5 sm:text-lg sm:max-w-xl sm:mx-auto md:mt-5 md:text-xl lg:mx-0"
-            >
+            </h1>
+            <p className="mt-3 text-text-secondary sm:mt-5 sm:text-lg sm:max-w-xl md:mt-5 md:text-xl">
               Boost your productivity with our comprehensive collection of
               keyboard shortcuts for various applications and platforms.
-            </motion.p>
-            <motion.div variants={itemVariants} className="mt-8 sm:mt-10">
-              <motion.div variants={buttonVariants} whileHover="hover">
-                <Link
-                  href="/search"
-                  className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
-                >
-                  Explore Shortcuts
-                </Link>
-              </motion.div>
-            </motion.div>
+            </p>
+            <div className="mt-8 sm:mt-10">
+              <Link
+                href="/search"
+                className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-highlight hover:bg-highlight/90 transition-colors"
+              >
+                Explore Shortcuts
+              </Link>
+            </div>
           </div>
-          <motion.div
-            className="relative"
-            initial={{ opacity: 0, x: 100 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
-          >
-            <Keyboard
-              variants={keyboardVariants}
-              initial="initial"
-              animate="animate"
-              whileHover="hover"
-              whileTap="tap"
-            />
-          </motion.div>
+          <div className="relative">
+            {/* Keyboard visualization component */}
+          </div>
         </div>
-      </motion.div>
-    </section>
+      </div>
+    </div>
   );
 }
