@@ -7,6 +7,9 @@ const config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'modern-slab': ['"Modern Slab Serif BC"', 'serif'],
+      },
       colors: {
         'page-white': '#F3F3F3',
         'page-bg': '#F3F3F3',

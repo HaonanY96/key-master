@@ -31,6 +31,16 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" className={inter.className}>
+      <head>
+      <style jsx global>{`
+        @font-face {
+          font-family: 'Arvo';
+          src: url('/fonts/Arvo-Regular.ttf') format('truetype');
+          font-weight: normal;
+          font-style: normal;
+        }
+      `}</style>
+      </head>
       <body className="min-h-screen bg-page-bg">
         <AuthContextProvider>
           {/* 顶部导航栏 */}

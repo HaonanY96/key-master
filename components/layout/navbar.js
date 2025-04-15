@@ -15,14 +15,20 @@ export default function Navbar() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-20">
           <div className="flex-shrink-0 flex items-center">
-            <Link href="/" className="relative h-12 w-[200px]">
-              <Image
-                src="/images/logo.svg"
-                alt="Key Master Logo"
-                fill
-                priority
-                className="object-contain"
-              />
+            <Link href="/" className="flex items-center">
+              <div className="relative h-14 w-[150px] md:h-16 md:w-[200px] lg:h-20 lg:w-[250px]">
+                <Image
+                    src="/images/logo.svg"
+                    alt="Key Master Logo"
+                    fill
+                    priority
+                    className="object-contain object-right"
+                  />
+              </div>   
+              <div className="-ml-2 flex flex-col">
+                <span className="md:text-base lg:text-xl font-semibold text-gray-700" style={{ fontFamily: 'Arvo' }}>{"{Key}"}</span>
+                <span className="md:text-base lg:text-xl font-semibold text-gray-700" style={{ fontFamily: 'Arvo' }}>Master</span>
+              </div>          
             </Link>
           </div>
 

@@ -9,9 +9,12 @@ services:
       - "3000:3000"
     environment:
       - NODE_ENV=development
+      - WATCHPACK_POLLING=true
     env_file:
       - .env.local
+      - .env.docker
     volumes:
       - .:/app
       - /app/node_modules
+      - /app/.next
     command: npm run dev 
