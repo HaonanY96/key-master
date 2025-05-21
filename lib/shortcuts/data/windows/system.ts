@@ -4,7 +4,7 @@ import {
   ShortcutGroup,
   ShortcutsCollection,
   Shortcut
-} from "@/lib/shortcuts/types/common";
+} from "@/lib/shortcuts/types";
 
 export const shortcutGroups: Record<string, ShortcutGroup> = {
   "windows-system": {

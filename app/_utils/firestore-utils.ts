@@ -1,6 +1,6 @@
 import { db } from './firebase';
 import { doc, setDoc, getDoc, updateDoc, deleteDoc, serverTimestamp } from 'firebase/firestore';
-import type { UserData, ShortcutFavorite } from './types';
+import type { UserData, ShortcutFavorite } from '@/lib/user/types';
 
 export const firestoreUtils = {
   // Get user document

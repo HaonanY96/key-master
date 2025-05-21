@@ -4,7 +4,7 @@ import {
   ShortcutGroup,
   ShortcutsCollection,
   Shortcut
-} from "@/lib/shortcuts/types/common";
+} from "@/lib/shortcuts/types";
 
 // Export Shortcut type
 export type { Shortcut };

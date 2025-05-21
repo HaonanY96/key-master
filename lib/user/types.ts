@@ -24,4 +24,4 @@ export interface UserData {
     defaultPlatform: 'windows' | 'mac';
     theme: 'light' | 'dark';
   };
-} 
+}

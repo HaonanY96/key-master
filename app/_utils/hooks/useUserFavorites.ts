@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useUserAuth } from '../auth-context';
 import { onSnapshot, doc } from 'firebase/firestore';
 import { db } from '../firebase';
-import type { ShortcutFavorite } from '../types';
+import type { ShortcutFavorite } from '@/lib/user/types';
 
 export function useUserFavorites() {
   const { user } = useUserAuth();

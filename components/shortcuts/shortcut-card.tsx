@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { PauseIcon, PlayIcon } from '@heroicons/react/24/solid';
 import KeyboardVisualizer from '../keyboard/keyboard-visualizer';
 import FavoriteButton from './favorite-button';
-import { Shortcut } from '@/lib/shortcuts/types/common';
+import { Shortcut } from '@/lib/shortcuts/types';
 import { useUserFavorites } from '@/app/_utils/hooks/useUserFavorites';
 
 interface ShortcutCardProps {

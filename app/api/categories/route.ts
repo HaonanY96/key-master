@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { categories } from '@/lib/shortcuts/data/categories';
-import { CategoryType, type Category } from '@/lib/shortcuts/types/common';
+import { CategoryType, type Category } from '@/lib/shortcuts/types';
 
 export const dynamic = 'force-dynamic'
 

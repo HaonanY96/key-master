@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import ShortcutCard from '../shortcuts/shortcut-card';
-import type { Shortcut } from '@/lib/shortcuts/types/common';
+import type { Shortcut } from '@/lib/shortcuts/types';
 
 export default function SearchResults() {
   const [results, setResults] = useState<Shortcut[]>([]);

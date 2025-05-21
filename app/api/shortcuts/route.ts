@@ -1,43 +1,35 @@
 import { NextResponse } from 'next/server';
-import { shortcutsByPlatform, shortcuts } from '@/lib/shortcuts/data/shortcuts';
-import { FunctionType, Shortcut } from '@/lib/shortcuts/types/common';
+// Removed: import { shortcutsByPlatform, shortcuts } from '@/lib/shortcuts/data/shortcuts';
+import { FunctionType, Shortcut } from '@/lib/shortcuts/types';
+import { db } from '@/app/_utils/firebase'; // Firebase config
+import { collection, addDoc, getDocs, query, where } from 'firebase/firestore'; // Firestore functions for GET and POST
+import { handleApiError } from '@/app/_utils/api-helpers'; // Import the new error handler
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const platform = searchParams.get('platform') || 'windows';
+    const platform = searchParams.get('platform'); // Keep platform optional for now
     const category = searchParams.get('category');
     
-    // 获取基础数据
-    let results = platform === 'windows' 
-      ? [...shortcutsByPlatform.windows.system] 
-      : [...shortcuts];
+    const shortcutsCollection = collection(db, 'shortcuts');
+    let q = query(shortcutsCollection);
 
-    // 按分类筛选
-    if (category) {
-      // 确保大小写匹配
-      const normalizedCategory = category.toLowerCase();
-      results = results.filter(shortcut => 
-        shortcut.category?.toLowerCase() === normalizedCategory
-      );
-
-      // 如果没有找到结果，尝试使用 FunctionType 匹配
-      if (results.length === 0) {
-        const functionTypeKey = Object.entries(FunctionType).find(
-          ([_, value]) => value.toLowerCase() === normalizedCategory
-        )?.[0];
-
-        if (functionTypeKey) {
-          results = results.filter(shortcut => 
-            shortcut.category === FunctionType[functionTypeKey as keyof typeof FunctionType]
-          );
-        }
-      }
+    if (platform) {
+      q = query(q, where('platform', '==', platform));
     }
 
-    // 构建分组数据
+    const querySnapshot = await getDocs(q);
+    let results = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() } as Shortcut));
+
+    // Simplified category filtering (post-fetch)
+    if (category) {
+      const normalizedCategory = category.toLowerCase();
+      results = results.filter(shortcut => shortcut.category?.toLowerCase() === normalizedCategory);
+    }
+
+    // 构建分组数据 (this logic can remain, operating on Firestore results)
     const groups = results.reduce<Record<string, any>>((acc, shortcut) => {
       const category = shortcut.category as string;
       if (!acc[category]) {
@@ -63,14 +55,7 @@ export async function GET(request: Request) {
     });
 
   } catch (error) {
-    console.error('API Error:', error);
-    return NextResponse.json(
-      { 
-        success: false, 
-        error: error instanceof Error ? error.message : 'Internal Server Error'
-      },
-      { status: 500 }
-    );
+    return handleApiError(error);
   }
 }
 
@@ -79,9 +64,8 @@ export async function POST(request: Request) {
   try {
     const data = await request.json();
     
-    // 创建新的快捷键对象
-    const newShortcut: Shortcut = {
-      id: (shortcuts.length + 1).toString(),
+    // 创建新的快捷键对象 (without local id generation for now, Firestore will generate one)
+    const shortcutData: Omit<Shortcut, 'id'> = { // Prepare data without id
       name: data.name,
       keys: Array.isArray(data.keys) ? data.keys : [data.key],
       description: data.description,
@@ -92,12 +76,19 @@ export async function POST(request: Request) {
       }
     };
 
-    // 将新快捷键添加到现有数组
-    shortcuts.push(newShortcut);
+    // Add the new shortcut to Firestore
+    const docRef = await addDoc(collection(db, "shortcuts"), shortcutData);
+
+    // Create the shortcut object to return, now including the Firestore-generated ID
+    const newShortcut: Shortcut = {
+      id: docRef.id,
+      ...shortcutData
+    };
 
     return NextResponse.json({
       success: true,
-      data: newShortcut
+      data: newShortcut,
+      message: "Shortcut added successfully to Firestore."
     }, { status: 201 });
 
   } catch (error) {

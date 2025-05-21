@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { shortcutGroups } from "@/lib/shortcuts/data/windows/system";
-import { type ShortcutGroup } from "@/lib/shortcuts/types/common";
+import { type ShortcutGroup } from "@/lib/shortcuts/types";
 
 /**
  * GET /api/shortcuts/categories

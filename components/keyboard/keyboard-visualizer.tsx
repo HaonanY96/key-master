@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import WindowsKeyboard from "./windows-keyboard";
-import { Shortcut } from "@/lib/shortcuts/types/common";
+import { Shortcut } from "@/lib/shortcuts/types";
 
 interface KeyboardVisualizerProps {
   platform?: 'windows' | 'mac';
