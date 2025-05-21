@@ -20,8 +20,10 @@ interface KeyStyle {
   rx: number;
 }
 
+type AnimationState = "highlighted" | "pressed" | "initial";
+
 interface BaseKeyboardProps {
-  activeKeys?: string[];
+  animatedKeyStates?: Record<string, AnimationState>; // Updated prop
   className?: string;
   keyMap?: Record<string, string>;
   keyboardType?: KeyboardType;
@@ -66,15 +68,13 @@ const getKeyId = (keyboardType: KeyboardType, keyId: string): string => {
 };
 
 export default function BaseKeyboard({
-  activeKeys = [],
+  animatedKeyStates = {}, // Default to empty object
   className,
   keyMap = {},
   keyboardType = "windows",
   ...props
 }: BaseKeyboardProps) {
-  const isKeyHighlighted = (keyId: string): boolean => {
-    return activeKeys.includes(keyId);
-  };
+  // isKeyHighlighted function is no longer needed
 
   const getKeyLabel = (keyId: string): string => {
     const platformSpecific = KEY_DISPLAY[keyboardType]?.[keyId];
@@ -95,39 +95,66 @@ export default function BaseKeyboard({
   };
 
   const renderKeyGroup = (keyId: string, children: React.ReactNode) => {
+    const testId = getKeyId(keyboardType, keyId); // Use the existing mapping for test ID
     return (
-      <motion.g key={keyId} id={getKeyId(keyboardType, keyId)}>
+      <motion.g key={keyId} id={testId} data-testid={testId}>
         {children}
       </motion.g>
     );
   };
 
   const renderKeyBackground = (keyId: string, props: KeyBackgroundProps) => {
-    const keyStyle = isKeyHighlighted(keyId)
-      ? KEY_STYLES.highlighted
-      : KEY_STYLES.default;
+    const variants = {
+      initial: KEY_STYLES.default,
+      highlighted: KEY_STYLES.highlighted,
+      pressed: KEY_STYLES.pressed,
+      hover: KEY_STYLES.hover,
+      active: KEY_STYLES.active,
+    };
 
-    // 移除 transition 和 textFill，只保留 SVGRect 相关属性
-    const { textFill, transition, ...rectStyle } = keyStyle;
+    // Determine current variant based on animatedKeyStates
+    const currentVariant = animatedKeyStates[keyId] || "initial";
+
+    // Ensure rx is part of the initial variant if not in others
+    if (variants.initial && props.rx && !variants.initial.rx) {
+      variants.initial.rx = props.rx;
+    }
+
 
     return (
       <motion.rect
-        {...props}
-        {...rectStyle}
-        whileHover={KEY_STYLES.hover}
-        whileTap={KEY_STYLES.active}
+        {...props} // Spread props first
+        variants={variants}
+        initial="initial"
+        animate={currentVariant}
+        whileHover="hover"
+        whileTap="active"
+        // Individual style props like fill, rx are now handled by variants
+        // However, props like x, y, width, height must remain
       />
     );
   };
 
   const renderKeyText = (keyId: string, props: KeyTextProps) => {
-    const keyStyle = isKeyHighlighted(keyId)
-      ? KEY_STYLES.highlighted
-      : KEY_STYLES.default;
+    // Determine current variant for text fill based on animatedKeyStates
+    const currentVariant = animatedKeyStates[keyId] || "initial";
+
+    const textVariants = {
+      initial: { fill: KEY_STYLES.default.textFill, opacity: 1 },
+      highlighted: { fill: KEY_STYLES.highlighted.textFill, opacity: 1 },
+      pressed: { fill: KEY_STYLES.pressed.textFill, opacity: 1 },
+      hover: { fill: KEY_STYLES.hover.textFill, opacity: 1 }, // Added for completeness
+      active: { fill: KEY_STYLES.active.textFill, opacity: 1 }, // Added for completeness
+    };
+    
     return (
       <motion.text
         {...props}
-        fill={keyStyle.textFill}
+        variants={textVariants}
+        initial="initial"
+        animate={currentVariant}
+        // whileHover and whileTap for text can be added if needed,
+        // ensure KEY_STYLES.hover/active have textFill if so.
         style={{
           userSelect: "none",
           fontFamily: "Inter, sans-serif",

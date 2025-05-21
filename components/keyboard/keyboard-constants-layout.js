@@ -93,29 +93,39 @@ export const KEYBOARD_DIMENSIONS = {
 // 2. 按键样式常量
 export const KEY_STYLES = {
   default: {
-    fill: "#F1F1EF",
-    textFill: "#545454",
+    fill: "#F3F3F3", // Updated fill color
+    textFill: "#303841", // Updated text fill color
     rx: 8,
     filter: "url(#filter_ddi)",
     shapeRendering: "crispEdges",
-    transition: "all 0.2s ease",
+    // transition: "all 0.2s ease", // Managed by Framer Motion
   },
   hover: {
-    fill: "#E5E5E3",
-    textFill: "#404040",
-    filter: "url(#filter_ddi_hover)",
+    fill: "#E0E0E0", // Updated hover fill
+    textFill: "#2A2A2A", // Updated hover text fill
+    // filter: "url(#filter_ddi_hover)", // May not be needed with Framer Motion variants
   },
-  active: {
-    fill: "#D9D9D7",
-    textFill: "#333333",
-    transform: "translateY(1px)",
+  active: { // For direct click feedback if not using pressed for it
+    fill: "#CCCCCC", // Updated active fill
+    textFill: "#1A1A1A", // Updated active text fill
+    // transform: "translateY(1px)", // Will be handled by 'pressed' or framer motion's whileTap
   },
   highlighted: {
-    fill: "#FFED4A",
-    textFill: "#545454",
+    fill: "#2185D5", // Project's specified highlight color
+    textFill: "#FFFFFF", // Contrasting text fill for highlighted state
     transition: {
-      duration: 0.3,
+      duration: 0.2, // Standardized transition
       ease: "easeInOut",
+    },
+  },
+  pressed: {
+    fill: "#2185D5", // Same as highlighted, or slightly darker
+    textFill: "#FFFFFF", // Same as highlighted
+    scale: 0.95, // Simulate press
+    y: 2, // Simulate press
+    transition: {
+      duration: 0.1, // Quicker press effect
+      ease: "easeOut",
     },
   },
 };
@@ -657,12 +667,13 @@ export const KEY_ID_MAP = {
 // 添加动画相关常量
 export const ANIMATION_CONSTANTS = {
   duration: {
-    keyPress: 0.3,
-    sequence: 0.5,
-    reset: 0.2
+    keyPress: 0.3,      // How long a key stays in "pressed" state during a sequence.
+    sequenceStepDelay: 0.4, // Time from the start of one key press to the start of the next key press in a sequence.
+    finalHold: 1.0,     // How long the last key of the sequence remains visually active before resetting.
+    // reset: 0.2,      // This was less clear; reset is typically instant or part of a fade-out handled by isPlaying.
   },
-  colors: {
-    highlight: "#FFED4A",
-    active: "#E5B800"
+  colors: { // These colors are for reference; actual key colors are in KEY_STYLES.
+    highlight: KEY_STYLES.highlighted.fill, // Using actual highlight color
+    active: KEY_STYLES.pressed.fill,       // Using actual pressed color (or KEY_STYLES.active.fill if preferred)
   }
 };
